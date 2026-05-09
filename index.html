@@ -334,6 +334,40 @@ body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
 .install-banner .install{background:#fff;color:var(--primary-dark)}
 .install-banner .close{background:transparent;color:#fff;font-size:22px;width:32px;height:32px;border-radius:50%}
 
+/* welcome overlay */
+.welcome-bg{
+  position:fixed;inset:0;z-index:500;
+  background:linear-gradient(135deg,#A78BFA 0%,#F472B6 50%,#FBBF24 100%);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.welcome-bg.show{display:flex;animation:fadeIn .35s}
+.welcome-card{
+  background:#fff;border-radius:32px;padding:32px 24px;text-align:center;
+  max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3);
+  border:5px solid #FCD34D;animation:popIn .5s;
+}
+.welcome-emoji{font-size:88px;line-height:1;margin-bottom:8px;animation:bob 2s infinite ease-in-out}
+.welcome-title{font-size:48px;font-family:'Fredoka',sans-serif;color:var(--primary-dark);margin-bottom:6px}
+.welcome-sub{font-size:22px;color:var(--ink);margin-bottom:18px;font-weight:600}
+.welcome-input{
+  width:100%;padding:18px;font-size:24px;font-weight:700;text-align:center;
+  border:4px solid var(--primary);border-radius:18px;font-family:inherit;color:var(--ink);
+  background:#FAF5FF;transition:.2s;
+}
+.welcome-input:focus{outline:none;border-color:#FBBF24;background:#FEF3C7;box-shadow:0 0 0 6px rgba(251,191,36,.25)}
+.welcome-btn{
+  margin-top:18px;width:100%;min-height:60px;border-radius:999px;font-size:24px;font-weight:800;
+  background:linear-gradient(135deg,#FCD34D,#F59E0B);color:#7C2D12;
+  box-shadow:0 8px 22px rgba(245,158,11,.45);border:4px solid rgba(255,255,255,.5);
+  font-family:'Fredoka',sans-serif;
+}
+.welcome-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(245,158,11,.55)}
+.welcome-hint{margin-top:14px;font-size:13px;color:var(--ink-soft)}
+
+/* force LTR for numbers/math (avoids RTL reversing "4, 8, 15" into "15, 8, 4") */
+.ltr{direction:ltr;unicode-bidi:isolate;text-align:center}
+.ltr-inline{direction:ltr;unicode-bidi:isolate;display:inline-block}
+
 /* hidden helper */
 .hidden{display:none!important}
 
@@ -383,6 +417,7 @@ body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
     <div>נבנה עם ❤️ עבור הילדים שלנו</div>
     <div>📱 וואטסאפ: <a href="https://wa.me/972508668022">972508668022</a></div>
     <div class="links">
+      <button onclick="changeName()">✏️ שנה שם</button>
       <button onclick="openModal('privacy')">פרטיות</button>
       <button onclick="openModal('accessibility')">נגישות</button>
       <button onclick="openModal('terms')">תנאי שימוש</button>
@@ -400,6 +435,18 @@ body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
   <button class="close" onclick="document.getElementById('installBanner').classList.remove('show')">×</button>
 </div>
 
+<!-- ============ WELCOME OVERLAY ============ -->
+<div class="welcome-bg" id="welcomeBg">
+  <div class="welcome-card">
+    <div class="welcome-emoji">👋</div>
+    <h2 class="welcome-title">שלום!</h2>
+    <p class="welcome-sub">מה השם שלך?</p>
+    <input type="text" id="welcomeName" class="welcome-input" placeholder="הקלד את השם שלך" maxlength="20" autocomplete="given-name"/>
+    <button class="welcome-btn" id="welcomeBtn">יאללה! 🚀</button>
+    <p class="welcome-hint">אפשר גם לדלג — נקרא לך "חבר/ה"</p>
+  </div>
+</div>
+
 <!-- ============ MODALS ============ -->
 <div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="modal">
@@ -414,7 +461,7 @@ body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
    ============================================================ */
 const STORAGE_KEY = 'learn-lior-progress';
 const DEFAULT_STATE = {
-  profile: { name: 'אופק', avatar: '👦', createdAt: Date.now() },
+  profile: { name: '', avatar: '👦', createdAt: Date.now() },
   adventure: { currentStation: 1, completed: [], companions: [] },
   english: { categories: {}, abc: {} },
   math: { categories: {}, multiplication: {} },
@@ -605,17 +652,20 @@ const MATH_CATEGORIES = [
   {id:'mixed', name:'משימות מיוחדות', icon:'🧩'}
 ];
 
+function getName(){ return (state.profile.name && state.profile.name.trim()) ? state.profile.name.trim() : 'חבר/ה'; }
+
 const ADVENTURE_STORIES = {
-  intro: 'אופק! הנסיכה נחטפה ע"י הקוסם הרשע! 👸 רק אתה יכול להציל אותה. יוצאים למסע!',
-  forestStart: 'הגענו ליער הקסום 🌳 חיות ידידותיות זקוקות לעזרתך כדי לעבור.',
-  iceStart: '🧊 ממלכת הקרח! קר ומפחיד כאן... אבל שום דבר לא יעצור אותך.',
-  castleStart: '🏰 הטירה האפלה מולך! הנסיכה כלואה במגדל. תגיע אליה?',
-  rescue: '🎉 הצלחת! הנסיכה ניצלה! אתה הגיבור של הממלכה! 👑'
+  intro: () => `${getName()}! הנסיכה נחטפה ע"י הקוסם הרשע! 👸 רק אתה יכול להציל אותה. יוצאים למסע!`,
+  forestStart: () => `${getName()} הגיע ליער הקסום 🌳 חיות ידידותיות זקוקות לעזרתך כדי לעבור.`,
+  iceStart: () => `🧊 ${getName()} הגיע לממלכת הקרח! קר ומפחיד כאן... אבל שום דבר לא יעצור אותך.`,
+  castleStart: () => `🏰 ${getName()}, הטירה האפלה מולך! הנסיכה כלואה במגדל. תגיע אליה?`,
+  rescue: () => `🎉 ${getName()} הציל את הנסיכה! גיבור הממלכה! 👑`
 };
 
 function getStationStory(n){
+  const NAME = getName();
   const stories = {
-    1:'התחלת המסע. החיות ביער שמחות לראות אותך! 🌳',
+    1:`${NAME} מתחיל את המסע! החיות ביער שמחות לראות אותך 🌳`,
     2:'שועלון אבד את הדרך הביתה. עזור לו! 🦊',
     3:'מפלצת קטנה חוסמת את השביל! 👹',
     4:'נחל זורם — צריך לפתור חידה כדי לעבור 🌊',
@@ -625,7 +675,7 @@ function getStationStory(n){
     8:'נמלים זקוקות לעזרה לבנות גשר! 🐜',
     9:'דוב צעיר תועה! 🐻',
     10:'🦅 בוס הנשר הענק! קרב סוף יער!',
-    11:'הגענו לממלכת הקרח! 🧊',
+    11:`${NAME} הגיע לממלכת הקרח! 🧊`,
     12:'אריה שלג שואג! 🦁❄️',
     13:'גשר קרח שביר... תזהר!',
     14:'דוב קוטב מציע אגוזים בתמורה לתשובה 🐻‍❄️',
@@ -635,7 +685,7 @@ function getStationStory(n){
     18:'גמד שלג עם בעיה ❄️',
     19:'יונים נמסות... חממנו אותן 🕊️',
     20:'🐲 בוס מלך הקרח! קרב סוף ממלכה!',
-    21:'הטירה האפלה מולנו 🏰',
+    21:`${NAME} הגיע לטירה האפלה 🏰`,
     22:'שדים קטנים בכניסה 👹',
     23:'מדרגות מסתובבות 🌀',
     24:'אבירים שלדים! 💀',
@@ -644,7 +694,7 @@ function getStationStory(n){
     27:'חידת הקוסם! 🧙',
     28:'הקרב לפני ההצלה! ⚔️',
     29:'דלת המגדל 🚪',
-    30:'👑 הקרב האחרון! הצלת הנסיכה!'
+    30:`👑 הקרב האחרון! ${NAME} מציל את הנסיכה!`
   };
   return stories[n] || `תחנה ${n}`;
 }
@@ -669,6 +719,15 @@ const LEVEL_TITLES = [
 function levelTitle(station){
   for(const t of LEVEL_TITLES){ if(station>=t.min && station<=t.max) return t.title; }
   return '👑 מלך האלופים';
+}
+function levelUpMessage(justFinishedStation){
+  const next = justFinishedStation + 1;
+  const wasLast = LEVEL_TITLES.find(t=>t.max===justFinishedStation);
+  const newLevel = LEVEL_TITLES.find(t=>t.min===next);
+  if(wasLast && newLevel){
+    return `🎊 ${getName()} עלה לדרגת ${newLevel.title}!<br><br>`;
+  }
+  return '';
 }
 
 const ACHIEVEMENTS = [
@@ -852,7 +911,10 @@ function render(){
 
 function updateTopBar(){
   document.getElementById('topAvatar').textContent = state.profile.avatar;
-  document.getElementById('topGreeting').textContent = `שלום ${state.profile.name}!`;
+  const isReturn = state.streak.current > 1 && state.streak.lastDate === todayStr() && route.screen === 'home';
+  document.getElementById('topGreeting').textContent = isReturn
+    ? `שלום ${getName()}, חזרת!`
+    : `שלום ${getName()}!`;
   document.getElementById('starsPill').textContent = `⭐ ${state.stars.total}`;
   document.getElementById('streakPill').textContent = `🔥 ${state.streak.current}`;
 }
@@ -888,7 +950,7 @@ function renderHome(){
       </div>`}
 
     <div class="adventure-card tappable" data-go="adventure">
-      <div class="head">🗺️ המסע של אופק</div>
+      <div class="head">🗺️ המסע של ${getName()}</div>
       <div class="quote">"${stationStory}"</div>
       <div class="progress"><div class="progress-fill" style="width:${advProgress}%"></div></div>
       <div class="station-text">תחנה ${Math.min(adv.currentStation,30)}/30 • ${levelTitle(adv.currentStation)}</div>
@@ -993,9 +1055,9 @@ function renderStationIntro({station}){
   const isFirst = station===1 && state.adventure.completed.length===0;
   const isWorldStart = station===11 || station===21;
   let preStory = '';
-  if(isFirst) preStory = ADVENTURE_STORIES.intro+'<br><br>';
-  if(station===11) preStory = ADVENTURE_STORIES.iceStart+'<br><br>';
-  if(station===21) preStory = ADVENTURE_STORIES.castleStart+'<br><br>';
+  if(isFirst) preStory = ADVENTURE_STORIES.intro()+'<br><br>';
+  if(station===11) preStory = ADVENTURE_STORIES.iceStart()+'<br><br>';
+  if(station===21) preStory = ADVENTURE_STORIES.castleStart()+'<br><br>';
   return `
   <div class="section" style="text-align:center">
     <div style="font-size:72px;margin:14px 0">${sd.icon}</div>
@@ -1077,7 +1139,7 @@ function renderMultGrid(){
     else if(m.correct >= 5) cls+=' partial';
     tiles.push(`<div class="${cls}" data-table="${t}">
       <span class="num">${t}</span>
-      <span class="label">לוח ${t} • ${m.correct||0}/12</span>
+      <span class="label">לוח ${t} • <span class="ltr-inline">${m.correct||0}/12</span></span>
     </div>`);
   }
   return `
@@ -1132,6 +1194,18 @@ function renderAchievements(){
    ============================================================ */
 function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function pickPraise(){
+  const N = getName();
+  return pick([
+    `🎉 ${N}, כל הכבוד!`,
+    `⭐ מצוין ${N}!`,
+    `🌟 כל הכבוד ${N}!`,
+    `🚀 ${N}, אתה אלוף!`,
+    `🎯 בול ${N}!`,
+    `💪 חזק ${N}!`,
+    `🏆 ${N}, יפה מאוד!`
+  ]);
+}
 function pickDifferent(a, exclude, n){
   const opts = a.filter(x=>x!==exclude);
   return shuffle(opts).slice(0,n);
@@ -1169,14 +1243,14 @@ function makeEnglishQ(item, listAll, type){
   if(item.n!==undefined){ // numbers
     if(type==='emoji2word' || type==='num2word'){
       const wrongs = pickDifferent(listAll.map(x=>x.w), item.w, 3);
-      return {prompt:'איך אומרים את המספר?', content:String(item.n), contentClass:'', choices:shuffle([item.w,...wrongs]), answer:item.w, speak:item.w};
+      return {prompt:'איך אומרים את המספר?', content:String(item.n), contentClass:'q-content ltr', choices:shuffle([item.w,...wrongs]), answer:item.w, speak:item.w};
     }
     if(type==='he2en'){
       const wrongs = pickDifferent(listAll.map(x=>x.w), item.w, 3);
       return {prompt:'תרגם לאנגלית', content:item.he, contentClass:'q-content tiny', choices:shuffle([item.w,...wrongs]), answer:item.w, speak:item.w};
     }
     const wrongs = pickDifferent(listAll.map(x=>x.n), item.n, 3);
-    return {prompt:'איזה מספר?', content:item.w, contentClass:'q-content small', choices:shuffle([item.n,...wrongs]).map(String), answer:String(item.n), speak:item.w};
+    return {prompt:'איזה מספר?', content:item.w, contentClass:'q-content small', choices:shuffle([item.n,...wrongs]).map(String), answer:String(item.n), speak:item.w, ltrChoices:true};
   }
   // generic list
   if(type==='emoji2word'){
@@ -1209,7 +1283,7 @@ function makeMathQ(cat, opts={}){
     const b = Math.floor(Math.random()*Math.min(max-a, max))+1;
     const ans = a+b;
     const wrongs = uniqueWrongs(ans, max*2, 3);
-    return {prompt:'כמה זה?', content:`${a} + ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), visualDots: a+b<=20?a+b:0, dotsSplit:[a,b]};
+    return {prompt:'כמה זה?', content:`${a} + ${b}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), visualDots: a+b<=20?a+b:0, dotsSplit:[a,b], ltrChoices:true};
   }
   if(cat==='sub'){
     const max = level===1?10:level===2?20:100;
@@ -1217,21 +1291,21 @@ function makeMathQ(cat, opts={}){
     const b = Math.floor(Math.random()*a)+1;
     const ans = a-b;
     const wrongs = uniqueWrongs(ans, max, 3);
-    return {prompt:'כמה זה?', content:`${a} - ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans)};
+    return {prompt:'כמה זה?', content:`${a} - ${b}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), ltrChoices:true};
   }
   if(cat==='mult'){
     const t = table || (Math.floor(Math.random()*11)+2);
     const b = Math.floor(Math.random()*12)+1;
     const ans = t*b;
     const wrongs = uniqueWrongs(ans, 144, 3);
-    return {prompt:`לוח ${t}`, content:`${t} × ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), multTable:t, multFact:b};
+    return {prompt:`לוח ${t}`, content:`${t} × ${b}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), multTable:t, multFact:b, ltrChoices:true};
   }
   if(cat==='div'){
     const b = Math.floor(Math.random()*9)+2;
     const ans = Math.floor(Math.random()*9)+2;
     const a = b*ans;
     const wrongs = uniqueWrongs(ans, 12, 3);
-    return {prompt:'כמה זה?', content:`${a} ÷ ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans)};
+    return {prompt:'כמה זה?', content:`${a} ÷ ${b}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), ltrChoices:true};
   }
   if(cat==='mixed'){
     return makeMixedChallenge();
@@ -1259,7 +1333,7 @@ function makeMixedChallenge(){
     const ans = Math.floor(Math.random()*9)+1;
     const sum = a+ans;
     const wrongs = uniqueWrongs(ans, 20, 3);
-    return {prompt:'מצא את המספר החסר', content:`${a} + ? = ${sum}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans)};
+    return {prompt:'מצא את המספר החסר', content:`${a} + ? = ${sum}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), ltrChoices:true};
   }
   if(k==='compare'){
     const a = Math.floor(Math.random()*9)+2, b=Math.floor(Math.random()*9)+2;
@@ -1267,7 +1341,7 @@ function makeMixedChallenge(){
     const v1 = a*b, v2 = c*d;
     if(v1===v2){ return makeMixedChallenge(); }
     const ans = v1>v2?`${a}×${b}`:`${c}×${d}`;
-    return {prompt:'מי גדול יותר?', content:`${a}×${b}   ?   ${c}×${d}`, contentClass:'q-content small', choices:[`${a}×${b}`,`${c}×${d}`,'שווים'], answer:ans};
+    return {prompt:'מי גדול יותר?', content:`${a}×${b}   ?   ${c}×${d}`, contentClass:'q-content small ltr', choices:[`${a}×${b}`,`${c}×${d}`,'שווים'], answer:ans, ltrChoices:true};
   }
   if(k==='order'){
     const nums = [];
@@ -1277,7 +1351,7 @@ function makeMixedChallenge(){
     const wrong2 = [...nums].sort((x,y)=>y-x);
     const ans = sorted.join(', ');
     const choices = shuffle([ans, wrong1.join(', '), wrong2.join(', ')]);
-    return {prompt:'סדר מהקטן לגדול', content:nums.join(', '), contentClass:'q-content small', choices, answer:ans};
+    return {prompt:'סדר מהקטן לגדול', content:nums.join(', '), contentClass:'q-content small ltr', choices, answer:ans, ltrChoices:true};
   }
 }
 
@@ -1375,7 +1449,7 @@ function renderQuestion(){
     `;
   } else {
     bodyHTML = `<div class="choices">
-      ${q.choices.map((c,i)=>`<button class="choice" data-choice="${i}">${c}</button>`).join('')}
+      ${q.choices.map((c,i)=>`<button class="choice${q.ltrChoices?' ltr':''}" data-choice="${i}">${c}</button>`).join('')}
     </div>`;
   }
 
@@ -1384,7 +1458,7 @@ function renderQuestion(){
   document.getElementById('main').innerHTML = `
   <div class="question-wrap">
     <div class="q-header">
-      <span>${session.current+1}/${total}</span>
+      <span class="ltr-inline">${session.current+1}/${total}</span>
       <div class="q-progress"><div class="q-progress-fill" style="width:${pct}%"></div></div>
       <span>⭐ ${session.correct}</span>
     </div>
@@ -1434,7 +1508,7 @@ function handleAnswer(correct, idx){
     state.stats.totalCorrect++;
     addStars(1, 'answer');
     playSound('right');
-    showFeedback('🎉 כל הכבוד!', 'right');
+    showFeedback(pickPraise(), 'right');
     updateStreak(true);
     if(state.stats.totalCorrect===1) unlockAchievement('first');
     // mark choice
@@ -1476,7 +1550,7 @@ function handleAnswer(correct, idx){
     }
   } else {
     playSound('wrong');
-    showFeedback('🤔 ננסה שוב!', 'wrong');
+    showFeedback(`🤔 ${getName()}, ננסה שוב!`, 'wrong');
     updateStreak(false);
     if(idx!==null){
       document.querySelectorAll('.choice').forEach((el,i)=>{
@@ -1533,14 +1607,14 @@ function finishSession(){
     document.getElementById('main').innerHTML = `
       <div class="section" style="text-align:center;padding-top:40px">
         <div style="font-size:96px">${passed?(p.station===30?'👸':'🎉'):'😢'}</div>
-        <h2 style="margin:14px 0">${passed?(p.station===30?'הצלת את הנסיכה!':'תחנה הושלמה!'):'נסה שוב!'}</h2>
+        <h2 style="margin:14px 0">${passed?(p.station===30?`${getName()} הציל את הנסיכה!`:`${getName()}, תחנה הושלמה!`):`${getName()}, ננסה שוב!`}</h2>
         <div class="card" style="margin:14px 0">
-          <div style="font-size:28px;font-weight:700">${correct}/${total}</div>
+          <div style="font-size:28px;font-weight:700" class="ltr">${correct}/${total}</div>
           <div style="color:var(--ink-soft)">${pct}% תשובות נכונות</div>
           <div style="margin-top:10px;color:var(--primary-dark);font-weight:700">+${correct} ⭐</div>
         </div>
-        ${passed && p.station<30 ? `<div class="bubble">תחנה ${p.station+1} פתוחה! 🚀</div>`:''}
-        ${p.station===30 && passed ? `<div class="bubble">${ADVENTURE_STORIES.rescue}</div>`:''}
+        ${passed && p.station<30 ? `<div class="bubble">${levelUpMessage(p.station)}תחנה ${p.station+1} פתוחה! 🚀</div>`:''}
+        ${p.station===30 && passed ? `<div class="bubble">${ADVENTURE_STORIES.rescue()}</div>`:''}
         <button class="btn full" onclick="go('adventure')" style="margin-top:14px">חזור למפה</button>
         <button class="btn ghost full" onclick="go('home')" style="margin-top:8px">לעמוד הבית</button>
       </div>`;
@@ -1551,7 +1625,7 @@ function finishSession(){
         <div style="font-size:96px">${pct>=80?'🌟':pct>=50?'👍':'💪'}</div>
         <h2 style="margin:14px 0">${pct>=80?'מצוין!':pct>=50?'טוב מאוד!':'תרגול עושה את המורה!'}</h2>
         <div class="card" style="margin:14px 0">
-          <div style="font-size:28px;font-weight:700">${correct}/${total}</div>
+          <div style="font-size:28px;font-weight:700" class="ltr">${correct}/${total}</div>
           <div style="color:var(--ink-soft)">${pct}% תשובות נכונות</div>
           <div style="margin-top:10px;color:var(--primary-dark);font-weight:700">+${correct} ⭐</div>
         </div>
@@ -1648,11 +1722,56 @@ if('serviceWorker' in navigator){
 }
 
 /* ============================================================
+   WELCOME / NAME ENTRY
+   ============================================================ */
+function showWelcome(opts={}){
+  const bg = document.getElementById('welcomeBg');
+  const inp = document.getElementById('welcomeName');
+  const btn = document.getElementById('welcomeBtn');
+  const hint = bg.querySelector('.welcome-hint');
+  const title = bg.querySelector('.welcome-title');
+  const sub = bg.querySelector('.welcome-sub');
+
+  if(opts.changing){
+    title.textContent = 'שינוי שם';
+    sub.textContent = `איך נקרא לך עכשיו?`;
+    hint.style.display = 'none';
+    inp.value = state.profile.name || '';
+  } else {
+    title.textContent = 'שלום!';
+    sub.textContent = 'מה השם שלך?';
+    hint.style.display = '';
+    inp.value = '';
+  }
+  bg.classList.add('show');
+  setTimeout(()=>inp.focus(), 120);
+
+  const submit = ()=>{
+    const v = inp.value.trim();
+    state.profile.name = v.slice(0,20);
+    saveState();
+    bg.classList.remove('show');
+    playSound('mission');
+    render();
+    if(v) showFeedback(`שלום ${v}! 👋`, 'right');
+  };
+  btn.onclick = submit;
+  inp.onkeydown = e => { if(e.key==='Enter') submit(); };
+}
+function changeName(){ showWelcome({changing:true}); }
+
+/* ============================================================
    INIT
    ============================================================ */
 updateDailyStreak();
 generateDailyMission();
-render();
+if(!state.profile.name){
+  showWelcome();
+  // still render the home behind the overlay
+  render();
+} else {
+  render();
+}
 
 </script>
 </body>
