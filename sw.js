@@ -1,4 +1,4 @@
-const CACHE = 'learn-lior-v3';
+const CACHE = 'learn-lior-v4';
 const ASSETS = ['/', '/index.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
