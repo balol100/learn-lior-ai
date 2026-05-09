@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#A78BFA">
+<meta name="description" content="משחק חינוכי חינם לילדים – לימוד אנגלית, חשבון, אותיות, לוח הכפל ועוד. מסע הרפתקאות אינטראקטיבי בעברית עם מאות שאלות.">
+<meta name="keywords" content="לימוד לילדים, אנגלית לילדים, חשבון לילדים, לוח הכפל, אותיות באנגלית, משחק חינוכי, ABC, חינם">
+<meta name="author" content="lior_Ai">
+<meta property="og:type" content="website">
+<meta property="og:title" content="לימוד אנגלית וחשבון לילדים – משחק חינוכי חינם | lior_Ai">
+<meta property="og:description" content="מסע הרפתקאות חינוכי לילדים – אנגלית, חשבון, לוח הכפל, אותיות. חינם לחלוטין, ללא הרשמה.">
+<meta property="og:url" content="https://learn.lior-ai.com">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="לימוד לילדים – משחק חינוכי חינם | lior_Ai">
+<title>לימוד אנגלית וחשבון לילדים – משחק חינוכי חינם | lior_Ai</title>
+<link rel="canonical" href="https://learn.lior-ai.com/">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🎓</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🎓</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalApplication",
+  "name": "lior_Ai – לימוד לילדים",
+  "url": "https://learn.lior-ai.com",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web Browser",
+  "inLanguage": "he",
+  "audience": {"@type": "EducationalAudience", "educationalRole": "student"},
+  "educationalLevel": "elementary",
+  "learningResourceType": "interactive game",
+  "teaches": ["English", "Mathematics", "Multiplication", "Reading"],
+  "isAccessibleForFree": true,
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "ILS"},
+  "publisher": {"@type": "Organization", "name": "lior_Ai", "url": "https://lior-ai.com"}
+}
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --sky:#E0F2FE;--lavender:#EDE9FE;--mint:#D1FAE5;--peach:#FED7AA;
+  --primary:#A78BFA;--primary-dark:#7C3AED;--secondary:#FB923C;
+  --pink:#F472B6;--green:#34D399;--blue:#60A5FA;--yellow:#FBBF24;--red:#F87171;
+  --ink:#1F2937;--ink-soft:#4B5563;--muted:#9CA3AF;
+  --card:#FFFFFF;--card-soft:#F9FAFB;
+  --shadow:0 4px 14px rgba(124,58,237,.12);
+  --shadow-lg:0 12px 32px rgba(124,58,237,.18);
+  --radius:20px;--radius-sm:14px;
+}
+html,body{height:100%}
+body{
+  font-family:'Heebo',system-ui,sans-serif;font-size:18px;color:var(--ink);
+  background:linear-gradient(135deg,#E0F2FE 0%,#EDE9FE 50%,#FCE7F3 100%);
+  background-attachment:fixed;min-height:100vh;line-height:1.5;
+  overflow-x:hidden;
+}
+h1,h2,h3,.fun{font-family:'Fredoka','Heebo',sans-serif;font-weight:700;letter-spacing:-.02em}
+button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit}
+button:active{transform:scale(.96)}
+img{max-width:100%}
+
+/* ===== LAYOUT ===== */
+.app{max-width:520px;margin:0 auto;min-height:100vh;padding-bottom:120px;position:relative}
+.topbar{
+  position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
+  background:rgba(255,255,255,.85);
+  padding:12px 16px;display:flex;align-items:center;gap:10px;
+  border-bottom:2px solid rgba(167,139,250,.2);
+}
+.topbar .greeting{flex:1;display:flex;align-items:center;gap:8px;font-weight:700;font-size:17px}
+.topbar .avatar{width:40px;height:40px;border-radius:50%;background:var(--lavender);display:flex;align-items:center;justify-content:center;font-size:24px;border:3px solid var(--primary)}
+.stars-pill,.streak-pill{
+  display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:999px;
+  font-weight:700;font-size:15px;white-space:nowrap;
+}
+.stars-pill{background:linear-gradient(135deg,#FCD34D,#F59E0B);color:#fff;box-shadow:0 3px 10px rgba(245,158,11,.3)}
+.streak-pill{background:linear-gradient(135deg,#FB923C,#EF4444);color:#fff;box-shadow:0 3px 10px rgba(239,68,68,.3)}
+.back-btn{
+  width:42px;height:42px;border-radius:50%;background:#fff;border:2px solid rgba(167,139,250,.3);
+  display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--primary-dark);
+  box-shadow:var(--shadow);
+}
+
+/* ===== CARDS ===== */
+.section{padding:20px 16px}
+.section h2{font-size:24px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card{
+  background:var(--card);border-radius:var(--radius);padding:18px;
+  box-shadow:var(--shadow);border:2px solid rgba(167,139,250,.15);
+  margin-bottom:14px;transition:transform .2s,box-shadow .2s;
+}
+.card.tappable:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.card.tappable:active{transform:translateY(0)}
+
+/* mission card */
+.mission{
+  background:linear-gradient(135deg,#FEF3C7,#FED7AA);
+  border:3px solid #F59E0B;border-radius:var(--radius);padding:16px;margin-bottom:16px;
+}
+.mission .label{font-size:13px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:.05em}
+.mission .title{font-size:20px;font-weight:700;margin:6px 0;color:#7C2D12}
+.mission .progress{height:12px;background:rgba(255,255,255,.6);border-radius:999px;overflow:hidden;margin-top:8px}
+.mission .progress-fill{height:100%;background:linear-gradient(90deg,#F59E0B,#F97316);border-radius:999px;transition:width .5s}
+.mission .progress-text{font-size:14px;color:#92400E;margin-top:6px;font-weight:600}
+
+/* adventure card on home */
+.adventure-card{
+  background:linear-gradient(135deg,#7C3AED 0%,#A78BFA 60%,#F472B6 100%);
+  color:#fff;padding:20px;border-radius:var(--radius);margin-bottom:16px;
+  box-shadow:var(--shadow-lg);border:3px solid rgba(255,255,255,.4);position:relative;overflow:hidden;
+}
+.adventure-card::before{content:"✨";position:absolute;top:8px;left:12px;font-size:24px;opacity:.6;animation:twinkle 3s infinite}
+.adventure-card::after{content:"⭐";position:absolute;bottom:8px;left:30px;font-size:18px;opacity:.5;animation:twinkle 2s infinite reverse}
+.adventure-card .head{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:700;margin-bottom:8px}
+.adventure-card .quote{font-size:15px;opacity:.95;margin:8px 0;font-style:italic}
+.adventure-card .progress{height:14px;background:rgba(0,0,0,.2);border-radius:999px;overflow:hidden;margin-top:10px}
+.adventure-card .progress-fill{height:100%;background:linear-gradient(90deg,#FBBF24,#F59E0B);border-radius:999px}
+.adventure-card .station-text{font-size:14px;margin-top:6px;font-weight:600;opacity:.95}
+
+/* category grid */
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cat-tile{
+  background:var(--card);border-radius:var(--radius);padding:18px 14px;text-align:center;
+  border:3px solid transparent;box-shadow:var(--shadow);transition:.2s;cursor:pointer;
+}
+.cat-tile.english{border-color:#60A5FA;background:linear-gradient(135deg,#fff,#DBEAFE)}
+.cat-tile.math{border-color:#34D399;background:linear-gradient(135deg,#fff,#D1FAE5)}
+.cat-tile .icon{font-size:42px;margin-bottom:6px;display:block}
+.cat-tile .title{font-size:18px;font-weight:700}
+.cat-tile .sub{font-size:13px;color:var(--ink-soft);margin-top:4px}
+.cat-tile:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+
+/* sub-categories grid */
+.subcat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.subcat-tile{
+  background:#fff;border-radius:var(--radius-sm);padding:16px 10px;text-align:center;
+  border:3px solid #E0E7FF;box-shadow:var(--shadow);cursor:pointer;transition:.2s;
+  min-height:120px;display:flex;flex-direction:column;justify-content:center;
+}
+.subcat-tile:hover{transform:scale(1.02);border-color:var(--primary)}
+.subcat-tile .icon{font-size:38px;margin-bottom:6px}
+.subcat-tile .name{font-weight:700;font-size:16px}
+.subcat-tile .progress-bar{height:6px;background:#E5E7EB;border-radius:999px;margin-top:10px;overflow:hidden}
+.subcat-tile .progress-bar-fill{height:100%;background:linear-gradient(90deg,#34D399,#10B981);border-radius:999px}
+.subcat-tile.locked{opacity:.55;filter:saturate(.5)}
+.subcat-tile.locked::after{content:"🔒";display:block;margin-top:4px;font-size:18px}
+
+/* trophies */
+.trophy-row{display:flex;flex-wrap:wrap;gap:10px}
+.trophy{
+  width:72px;height:72px;border-radius:50%;background:#fff;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;font-size:30px;border:3px solid #FCD34D;
+  box-shadow:var(--shadow);position:relative;
+}
+.trophy.locked{filter:grayscale(1);opacity:.4;border-color:#D1D5DB}
+.trophy .label{font-size:10px;font-weight:700;position:absolute;bottom:-22px;white-space:nowrap}
+
+/* ===== BUTTONS ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:52px;padding:12px 22px;border-radius:999px;font-weight:700;font-size:18px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;
+  box-shadow:0 6px 18px rgba(124,58,237,.35);transition:.18s;border:3px solid rgba(255,255,255,.3);
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(124,58,237,.45)}
+.btn.full{width:100%}
+.btn.success{background:linear-gradient(135deg,#34D399,#10B981);box-shadow:0 6px 18px rgba(16,185,129,.4)}
+.btn.warn{background:linear-gradient(135deg,#FB923C,#EF4444);box-shadow:0 6px 18px rgba(239,68,68,.35)}
+.btn.ghost{background:#fff;color:var(--primary-dark);border:3px solid var(--primary);box-shadow:var(--shadow)}
+
+/* ===== QUESTION SCREEN ===== */
+.question-wrap{padding:16px;display:flex;flex-direction:column;gap:14px}
+.q-header{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:16px}
+.q-progress{flex:1;margin:0 12px;height:10px;background:#fff;border-radius:999px;overflow:hidden;border:2px solid rgba(167,139,250,.3)}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,#A78BFA,#F472B6);border-radius:999px;transition:width .4s}
+.q-card{
+  background:#fff;border-radius:24px;padding:24px;text-align:center;
+  border:4px solid var(--primary);box-shadow:var(--shadow-lg);
+}
+.q-prompt{font-size:18px;color:var(--ink-soft);margin-bottom:12px;font-weight:600}
+.q-content{font-size:64px;margin:14px 0;line-height:1.1;font-weight:700;color:var(--primary-dark);font-family:'Fredoka',sans-serif}
+.q-content.small{font-size:36px}
+.q-content.tiny{font-size:24px}
+.q-emoji{font-size:96px;line-height:1;margin:10px 0}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.choice{
+  min-height:64px;padding:14px;background:#fff;border:3px solid #E0E7FF;border-radius:18px;
+  font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  transition:.18s;color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.06);
+}
+.choice:hover{border-color:var(--primary);transform:translateY(-2px);background:#FAF5FF}
+.choice.right{background:linear-gradient(135deg,#34D399,#10B981);color:#fff;border-color:#10B981;animation:popIn .35s}
+.choice.wrong{background:linear-gradient(135deg,#FCA5A5,#F87171);color:#fff;border-color:#EF4444;animation:shake .4s}
+.choice.dim{opacity:.5}
+
+/* type input */
+.type-row{display:flex;gap:8px;align-items:center}
+.type-input{
+  flex:1;padding:14px;border:3px solid var(--primary);border-radius:14px;font-size:22px;
+  font-weight:700;text-align:center;font-family:inherit;background:#fff;color:var(--ink);
+}
+.type-input:focus{outline:none;border-color:var(--primary-dark);box-shadow:0 0 0 4px rgba(167,139,250,.2)}
+
+/* feedback toast */
+.feedback{
+  position:fixed;top:20%;left:50%;transform:translateX(-50%);
+  padding:18px 32px;border-radius:24px;font-weight:800;font-size:26px;color:#fff;z-index:200;
+  pointer-events:none;animation:popIn .3s,fadeOut .3s 1.2s forwards;
+  box-shadow:0 10px 40px rgba(0,0,0,.3);
+  font-family:'Fredoka',sans-serif;
+}
+.feedback.right{background:linear-gradient(135deg,#34D399,#059669)}
+.feedback.wrong{background:linear-gradient(135deg,#F87171,#DC2626)}
+.feedback.epic{background:linear-gradient(135deg,#FBBF24,#F59E0B,#EC4899);font-size:32px}
+
+/* adventure map */
+.map-wrap{padding:14px;position:relative}
+.map-bg{
+  background:linear-gradient(180deg,#7DD3FC 0%,#A78BFA 50%,#1E1B4B 100%);
+  border-radius:24px;padding:20px 12px;color:#fff;position:relative;overflow:hidden;min-height:600px;
+}
+.map-bg::before{content:"☁️ ☁️   ☁️";position:absolute;top:10px;left:0;right:0;text-align:center;font-size:28px;opacity:.7}
+.map-stations{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:60px;position:relative;z-index:1}
+.station{
+  aspect-ratio:1;border-radius:16px;background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.3);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24px;font-weight:700;
+  position:relative;transition:.2s;
+}
+.station.done{background:linear-gradient(135deg,#34D399,#10B981);border-color:#fff}
+.station.current{background:linear-gradient(135deg,#FBBF24,#F59E0B);border-color:#fff;animation:pulse 1.6s infinite}
+.station.boss{background:linear-gradient(135deg,#EF4444,#7C2D12);border-color:#FCD34D}
+.station.boss.done{background:linear-gradient(135deg,#10B981,#065F46)}
+.station.locked{opacity:.5}
+.station .num{font-size:14px;position:absolute;top:2px;right:4px;font-weight:700;background:rgba(0,0,0,.3);padding:0 4px;border-radius:4px}
+.character-row{display:flex;justify-content:center;gap:10px;font-size:54px;margin-top:18px}
+.character-row .char{animation:bob 2s infinite ease-in-out}
+.world-banner{
+  background:rgba(0,0,0,.3);padding:10px 14px;border-radius:14px;margin-bottom:14px;text-align:center;
+  font-weight:700;font-size:18px;
+}
+
+/* speech bubble */
+.bubble{
+  background:#fff;color:var(--ink);padding:18px 20px;border-radius:20px;position:relative;
+  margin:14px auto 4px;max-width:90%;box-shadow:var(--shadow-lg);border:3px solid var(--primary);font-size:17px;line-height:1.5;
+}
+.bubble::after{content:"";position:absolute;bottom:-12px;right:30px;width:0;height:0;
+  border-left:14px solid transparent;border-right:14px solid transparent;border-top:14px solid #fff;}
+
+/* footer */
+footer{text-align:center;padding:24px 16px;color:var(--ink-soft);font-size:14px;line-height:1.8}
+footer a{color:var(--primary-dark);font-weight:700;text-decoration:none}
+footer .links{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin:10px 0}
+footer .links button{color:var(--primary-dark);font-weight:600;font-size:13px;text-decoration:underline;padding:4px 8px}
+
+/* modal */
+.modal-bg{
+  position:fixed;inset:0;background:rgba(31,41,55,.7);backdrop-filter:blur(4px);
+  z-index:300;display:none;align-items:center;justify-content:center;padding:14px;
+}
+.modal-bg.show{display:flex;animation:fadeIn .2s}
+.modal{
+  background:#fff;border-radius:24px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;
+  padding:24px;border:3px solid var(--primary);box-shadow:var(--shadow-lg);
+}
+.modal h3{font-size:24px;margin-bottom:12px}
+.modal p,.modal li{margin-bottom:8px;font-size:15px;line-height:1.6}
+.modal ul{padding-right:20px}
+.modal .close{float:left;width:36px;height:36px;border-radius:50%;background:#F3F4F6;font-size:22px;font-weight:700}
+
+/* accessibility panel */
+.a11y-fab{
+  position:fixed;bottom:20px;right:14px;width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:#fff;font-size:24px;
+  box-shadow:0 8px 22px rgba(29,78,216,.4);z-index:80;display:flex;align-items:center;justify-content:center;
+  border:3px solid #fff;
+}
+.a11y-panel button{display:block;width:100%;padding:12px;margin:6px 0;background:#F3F4F6;border-radius:12px;font-weight:600;font-size:15px;text-align:right}
+.a11y-panel button:hover{background:#E5E7EB}
+
+body.a11y-large{font-size:22px}
+body.a11y-large .q-content{font-size:80px}
+body.a11y-xlarge{font-size:26px}
+body.a11y-contrast{filter:contrast(1.4)}
+body.a11y-mono{filter:grayscale(1)}
+body.a11y-readable *{font-family:'Heebo',sans-serif!important;letter-spacing:.02em}
+body.a11y-no-anim *{animation:none!important;transition:none!important}
+body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
+
+/* tts pronunciation button */
+.speak-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#3B82F6;color:#fff;border-radius:999px;font-weight:700;font-size:15px;box-shadow:var(--shadow)}
+
+/* multiplication grid */
+.mult-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mult-tile{
+  background:#fff;border:3px solid #C7D2FE;border-radius:16px;padding:16px 8px;text-align:center;
+  font-weight:700;cursor:pointer;transition:.2s;
+}
+.mult-tile.mastered{background:linear-gradient(135deg,#34D399,#10B981);color:#fff;border-color:#10B981}
+.mult-tile.partial{background:linear-gradient(135deg,#FCD34D,#F59E0B);color:#fff;border-color:#F59E0B}
+.mult-tile .num{font-size:32px;display:block;line-height:1}
+.mult-tile .label{font-size:12px;display:block;margin-top:4px;opacity:.85}
+
+/* level title */
+.level-title{
+  background:linear-gradient(135deg,#FCD34D,#F59E0B);
+  color:#7C2D12;padding:8px 14px;border-radius:14px;font-weight:700;font-size:15px;text-align:center;margin-bottom:10px;
+  box-shadow:var(--shadow);border:2px solid rgba(255,255,255,.5);
+}
+
+/* visual addition aids */
+.dots-vis{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:10px 0;font-size:32px}
+
+/* confetti */
+.confetti{position:fixed;width:10px;height:10px;top:-20px;z-index:400;pointer-events:none;border-radius:2px}
+
+/* sparkle */
+.sparkle{position:fixed;font-size:22px;pointer-events:none;z-index:400;animation:sparkleAnim 1.2s ease-out forwards}
+
+/* install prompt */
+.install-banner{
+  position:fixed;bottom:18px;left:14px;right:14px;max-width:494px;margin:auto;
+  background:linear-gradient(135deg,#A78BFA,#7C3AED);color:#fff;padding:14px;border-radius:18px;
+  box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;z-index:90;display:none;border:3px solid rgba(255,255,255,.3);
+}
+.install-banner.show{display:flex}
+.install-banner .text{flex:1;font-weight:600;font-size:14px}
+.install-banner button{padding:8px 14px;border-radius:999px;font-weight:700;font-size:14px}
+.install-banner .install{background:#fff;color:var(--primary-dark)}
+.install-banner .close{background:transparent;color:#fff;font-size:22px;width:32px;height:32px;border-radius:50%}
+
+/* hidden helper */
+.hidden{display:none!important}
+
+/* animations */
+@keyframes popIn{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes twinkle{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+@keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(251,191,36,.7)}50%{transform:scale(1.05);box-shadow:0 0 0 14px rgba(251,191,36,0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg)}}
+@keyframes sparkleAnim{0%{opacity:1;transform:translate(0,0) scale(0)}50%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1.4)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+@keyframes jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-30px) rotate(-8deg)}60%{transform:translateY(-30px) rotate(8deg)}}
+.jumping{animation:jump .8s}
+@keyframes shakeChar{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.shaking-char{animation:shakeChar .5s}
+
+@media (min-width:768px){
+  .app{max-width:600px}
+  .topbar{padding:14px 20px}
+}
+@media (max-width:380px){
+  body{font-size:16px}
+  .q-content{font-size:48px}
+  .q-emoji{font-size:78px}
+  .choice{font-size:18px;min-height:56px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <button class="back-btn hidden" id="backBtn" aria-label="חזור">←</button>
+    <div class="greeting">
+      <div class="avatar" id="topAvatar">👦</div>
+      <span id="topGreeting">שלום!</span>
+    </div>
+    <span class="streak-pill" id="streakPill">🔥 0</span>
+    <span class="stars-pill" id="starsPill">⭐ 0</span>
+  </header>
+
+  <main id="main"></main>
+
+  <footer>
+    <div style="font-weight:700;font-size:18px;color:var(--primary-dark);margin-bottom:6px">lior_Ai 🎓</div>
+    <div>נבנה עם ❤️ עבור הילדים שלנו</div>
+    <div>📱 וואטסאפ: <a href="https://wa.me/972508668022">972508668022</a></div>
+    <div class="links">
+      <button onclick="openModal('privacy')">פרטיות</button>
+      <button onclick="openModal('accessibility')">נגישות</button>
+      <button onclick="openModal('terms')">תנאי שימוש</button>
+      <button onclick="resetProgress()">איפוס התקדמות</button>
+    </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--muted)">🔒 הנתונים נשמרים רק במכשיר שלך</div>
+  </footer>
+</div>
+
+<button class="a11y-fab" onclick="openModal('a11y')" aria-label="נגישות">♿</button>
+
+<div class="install-banner" id="installBanner">
+  <div class="text">📱 התקן את האפליקציה למסך הבית</div>
+  <button class="install" onclick="doInstall()">התקן</button>
+  <button class="close" onclick="document.getElementById('installBanner').classList.remove('show')">×</button>
+</div>
+
+<!-- ============ MODALS ============ -->
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal">
+    <button class="close" onclick="closeModal()">×</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+const STORAGE_KEY = 'learn-lior-progress';
+const DEFAULT_STATE = {
+  profile: { name: 'אופק', avatar: '👦', createdAt: Date.now() },
+  adventure: { currentStation: 1, completed: [], companions: [] },
+  english: { categories: {}, abc: {} },
+  math: { categories: {}, multiplication: {} },
+  stars: { total: 0, today: 0, lastTodayDate: '', history: [] },
+  streak: { current: 0, longest: 0, lastDate: '' },
+  missions: { daily: null, weekly: null },
+  achievements: [],
+  settings: { soundEnabled: true, ttsEnabled: true },
+  stats: { totalAnswered: 0, totalCorrect: 0, sessionStreak: 0, bestStreak: 0 }
+};
+
+let state = loadState();
+
+function loadState(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
+    return Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), JSON.parse(raw));
+  } catch(e){ return JSON.parse(JSON.stringify(DEFAULT_STATE)); }
+}
+function saveState(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+}
+function resetProgress(){
+  if(confirm('בטוח שברצונך לאפס את כל ההתקדמות?')){
+    localStorage.removeItem(STORAGE_KEY);
+    state = loadState();
+    saveState(); render();
+  }
+}
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+/* ============================================================
+   SOUND (Web Audio synthesized)
+   ============================================================ */
+let audioCtx = null;
+function getCtx(){
+  if(!audioCtx){
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){}
+  }
+  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function tone(freq, dur, type='sine', vol=.18, when=0){
+  const ctx = getCtx(); if(!ctx || !state.settings.soundEnabled) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type; osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, ctx.currentTime + when);
+  gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + when + .015);
+  gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + when + dur);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(ctx.currentTime + when);
+  osc.stop(ctx.currentTime + when + dur + .05);
+}
+function playSound(type){
+  if(!state.settings.soundEnabled) return;
+  switch(type){
+    case 'right':
+      tone(523.25, .12, 'sine', .2, 0);
+      tone(659.25, .12, 'sine', .2, .08);
+      tone(783.99, .25, 'sine', .22, .16);
+      break;
+    case 'wrong':
+      tone(196, .25, 'sine', .12, 0);
+      tone(174.61, .35, 'sine', .12, .12);
+      break;
+    case 'levelUp':
+      [523.25, 659.25, 783.99, 1046.5].forEach((f,i)=>tone(f, .2, 'triangle', .22, i*.1));
+      tone(1318.5, .4, 'triangle', .2, .5);
+      break;
+    case 'star':
+      tone(1568, .08, 'sine', .15, 0);
+      tone(2093, .12, 'sine', .15, .06);
+      break;
+    case 'mission':
+      tone(392, .15, 'sawtooth', .12, 0);
+      tone(523.25, .15, 'sawtooth', .12, .12);
+      tone(659.25, .25, 'sawtooth', .14, .24);
+      break;
+    case 'click':
+      tone(440, .05, 'square', .08, 0);
+      break;
+  }
+}
+
+/* TTS */
+function speak(text, lang='en-US'){
+  if(!state.settings.ttsEnabled || !window.speechSynthesis) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang; u.rate = .8; u.pitch = 1.05;
+    speechSynthesis.speak(u);
+  } catch(e){}
+}
+
+/* ============================================================
+   CONTENT DATA
+   ============================================================ */
+const ABC = [
+  {l:'A',e:'🍎',w:'Apple',he:'תפוח'},{l:'B',e:'🐻',w:'Bear',he:'דוב'},
+  {l:'C',e:'🐱',w:'Cat',he:'חתול'},{l:'D',e:'🐶',w:'Dog',he:'כלב'},
+  {l:'E',e:'🥚',w:'Egg',he:'ביצה'},{l:'F',e:'🐟',w:'Fish',he:'דג'},
+  {l:'G',e:'🦒',w:'Giraffe',he:'ג׳ירפה'},{l:'H',e:'🏠',w:'House',he:'בית'},
+  {l:'I',e:'🍦',w:'Ice cream',he:'גלידה'},{l:'J',e:'🤹',w:'Juggle',he:'לְלַהֵט'},
+  {l:'K',e:'🪁',w:'Kite',he:'עפיפון'},{l:'L',e:'🦁',w:'Lion',he:'אריה'},
+  {l:'M',e:'🌙',w:'Moon',he:'ירח'},{l:'N',e:'👃',w:'Nose',he:'אף'},
+  {l:'O',e:'🍊',w:'Orange',he:'תפוז'},{l:'P',e:'🍕',w:'Pizza',he:'פיצה'},
+  {l:'Q',e:'👸',w:'Queen',he:'מלכה'},{l:'R',e:'🌈',w:'Rainbow',he:'קשת'},
+  {l:'S',e:'☀️',w:'Sun',he:'שמש'},{l:'T',e:'🌳',w:'Tree',he:'עץ'},
+  {l:'U',e:'☂️',w:'Umbrella',he:'מטרייה'},{l:'V',e:'🎻',w:'Violin',he:'כינור'},
+  {l:'W',e:'🌊',w:'Water',he:'מים'},{l:'X',e:'🎄',w:'Xmas',he:'חג מולד'},
+  {l:'Y',e:'💛',w:'Yellow',he:'צהוב'},{l:'Z',e:'🦓',w:'Zebra',he:'זברה'}
+];
+
+const COLORS = [
+  {w:'Red',he:'אדום',e:'🔴'},{w:'Blue',he:'כחול',e:'🔵'},{w:'Green',he:'ירוק',e:'🟢'},
+  {w:'Yellow',he:'צהוב',e:'🟡'},{w:'Orange',he:'כתום',e:'🟠'},{w:'Purple',he:'סגול',e:'🟣'},
+  {w:'Pink',he:'ורוד',e:'🌸'},{w:'Black',he:'שחור',e:'⚫'},{w:'White',he:'לבן',e:'⚪'},
+  {w:'Brown',he:'חום',e:'🟤'}
+];
+
+const ANIMALS = [
+  {w:'Dog',he:'כלב',e:'🐶'},{w:'Cat',he:'חתול',e:'🐱'},{w:'Lion',he:'אריה',e:'🦁'},
+  {w:'Tiger',he:'טיגריס',e:'🐯'},{w:'Elephant',he:'פיל',e:'🐘'},{w:'Monkey',he:'קוף',e:'🐵'},
+  {w:'Bear',he:'דוב',e:'🐻'},{w:'Cow',he:'פרה',e:'🐄'},{w:'Horse',he:'סוס',e:'🐴'},
+  {w:'Pig',he:'חזיר',e:'🐷'},{w:'Rabbit',he:'ארנב',e:'🐰'},{w:'Mouse',he:'עכבר',e:'🐭'},
+  {w:'Frog',he:'צפרדע',e:'🐸'},{w:'Bird',he:'ציפור',e:'🐦'},{w:'Fish',he:'דג',e:'🐟'},
+  {w:'Snake',he:'נחש',e:'🐍'},{w:'Duck',he:'ברווז',e:'🦆'},{w:'Owl',he:'ינשוף',e:'🦉'}
+];
+
+const NUMBERS = [
+  {n:1,w:'One',he:'אחת'},{n:2,w:'Two',he:'שתיים'},{n:3,w:'Three',he:'שלוש'},
+  {n:4,w:'Four',he:'ארבע'},{n:5,w:'Five',he:'חמש'},{n:6,w:'Six',he:'שש'},
+  {n:7,w:'Seven',he:'שבע'},{n:8,w:'Eight',he:'שמונה'},{n:9,w:'Nine',he:'תשע'},
+  {n:10,w:'Ten',he:'עשר'},{n:11,w:'Eleven',he:'אחת עשרה'},{n:12,w:'Twelve',he:'שתים עשרה'},
+  {n:13,w:'Thirteen',he:'שלוש עשרה'},{n:14,w:'Fourteen',he:'ארבע עשרה'},{n:15,w:'Fifteen',he:'חמש עשרה'},
+  {n:16,w:'Sixteen',he:'שש עשרה'},{n:17,w:'Seventeen',he:'שבע עשרה'},{n:18,w:'Eighteen',he:'שמונה עשרה'},
+  {n:19,w:'Nineteen',he:'תשע עשרה'},{n:20,w:'Twenty',he:'עשרים'}
+];
+
+const FAMILY = [
+  {w:'Father',he:'אבא',e:'👨'},{w:'Mother',he:'אמא',e:'👩'},{w:'Brother',he:'אח',e:'👦'},
+  {w:'Sister',he:'אחות',e:'👧'},{w:'Son',he:'בן',e:'🧒'},{w:'Daughter',he:'בת',e:'👧'},
+  {w:'Baby',he:'תינוק',e:'👶'},{w:'Grandfather',he:'סבא',e:'👴'},{w:'Grandmother',he:'סבתא',e:'👵'},
+  {w:'Uncle',he:'דוד',e:'🧑'},{w:'Aunt',he:'דודה',e:'👩'},{w:'Family',he:'משפחה',e:'👨‍👩‍👧‍👦'}
+];
+
+const FOOD = [
+  {w:'Pizza',he:'פיצה',e:'🍕'},{w:'Apple',he:'תפוח',e:'🍎'},{w:'Bread',he:'לחם',e:'🍞'},
+  {w:'Cheese',he:'גבינה',e:'🧀'},{w:'Water',he:'מים',e:'💧'},{w:'Milk',he:'חלב',e:'🥛'},
+  {w:'Banana',he:'בננה',e:'🍌'},{w:'Egg',he:'ביצה',e:'🥚'},{w:'Cake',he:'עוגה',e:'🎂'},
+  {w:'Ice cream',he:'גלידה',e:'🍦'},{w:'Burger',he:'המבורגר',e:'🍔'},{w:'Salad',he:'סלט',e:'🥗'},
+  {w:'Cookie',he:'עוגייה',e:'🍪'},{w:'Orange',he:'תפוז',e:'🍊'}
+];
+
+const SCHOOL = [
+  {w:'Book',he:'ספר',e:'📕'},{w:'Pen',he:'עט',e:'🖊️'},{w:'Pencil',he:'עיפרון',e:'✏️'},
+  {w:'Desk',he:'שולחן',e:'🪑'},{w:'Chair',he:'כיסא',e:'💺'},{w:'Bag',he:'תיק',e:'🎒'},
+  {w:'Ruler',he:'סרגל',e:'📏'},{w:'Eraser',he:'מחק',e:'🧽'},{w:'Teacher',he:'מורה',e:'👩‍🏫'},
+  {w:'Student',he:'תלמיד',e:'👨‍🎓'},{w:'School',he:'בית ספר',e:'🏫'},{w:'Notebook',he:'מחברת',e:'📓'}
+];
+
+const WEATHER = [
+  {w:'Sun',he:'שמש',e:'☀️'},{w:'Rain',he:'גשם',e:'🌧️'},{w:'Snow',he:'שלג',e:'❄️'},
+  {w:'Cloud',he:'ענן',e:'☁️'},{w:'Wind',he:'רוח',e:'💨'},{w:'Storm',he:'סערה',e:'⛈️'},
+  {w:'Rainbow',he:'קשת',e:'🌈'},{w:'Hot',he:'חם',e:'🔥'},{w:'Cold',he:'קר',e:'🥶'},
+  {w:'Moon',he:'ירח',e:'🌙'},{w:'Star',he:'כוכב',e:'⭐'},{w:'Sky',he:'שמיים',e:'🌌'}
+];
+
+const ENGLISH_CATEGORIES = [
+  {id:'abc', name:'האותיות A-Z', icon:'🔤', data:ABC, type:'abc'},
+  {id:'colors', name:'צבעים', icon:'🎨', data:COLORS, type:'list'},
+  {id:'animals', name:'חיות', icon:'🐾', data:ANIMALS, type:'list'},
+  {id:'numbers', name:'מספרים 1-20', icon:'🔢', data:NUMBERS, type:'numbers'},
+  {id:'family', name:'משפחה', icon:'👨‍👩‍👧‍👦', data:FAMILY, type:'list'},
+  {id:'food', name:'אוכל', icon:'🍕', data:FOOD, type:'list'},
+  {id:'school', name:'בית ספר', icon:'🏫', data:SCHOOL, type:'list'},
+  {id:'weather', name:'מזג אוויר', icon:'🌤️', data:WEATHER, type:'list'}
+];
+
+const MATH_CATEGORIES = [
+  {id:'add', name:'חיבור', icon:'➕'},
+  {id:'sub', name:'חיסור', icon:'➖'},
+  {id:'mult', name:'לוח הכפל', icon:'✖️'},
+  {id:'div', name:'חילוק', icon:'➗'},
+  {id:'mixed', name:'משימות מיוחדות', icon:'🧩'}
+];
+
+const ADVENTURE_STORIES = {
+  intro: 'אופק! הנסיכה נחטפה ע"י הקוסם הרשע! 👸 רק אתה יכול להציל אותה. יוצאים למסע!',
+  forestStart: 'הגענו ליער הקסום 🌳 חיות ידידותיות זקוקות לעזרתך כדי לעבור.',
+  iceStart: '🧊 ממלכת הקרח! קר ומפחיד כאן... אבל שום דבר לא יעצור אותך.',
+  castleStart: '🏰 הטירה האפלה מולך! הנסיכה כלואה במגדל. תגיע אליה?',
+  rescue: '🎉 הצלחת! הנסיכה ניצלה! אתה הגיבור של הממלכה! 👑'
+};
+
+function getStationStory(n){
+  const stories = {
+    1:'התחלת המסע. החיות ביער שמחות לראות אותך! 🌳',
+    2:'שועלון אבד את הדרך הביתה. עזור לו! 🦊',
+    3:'מפלצת קטנה חוסמת את השביל! 👹',
+    4:'נחל זורם — צריך לפתור חידה כדי לעבור 🌊',
+    5:'🐺 בוס הזאב הגדול! קרב ראשון!',
+    6:'כלב חכם הצטרף אליך! 🐕',
+    7:'מערה חשוכה... מי שם? 🦇',
+    8:'נמלים זקוקות לעזרה לבנות גשר! 🐜',
+    9:'דוב צעיר תועה! 🐻',
+    10:'🦅 בוס הנשר הענק! קרב סוף יער!',
+    11:'הגענו לממלכת הקרח! 🧊',
+    12:'אריה שלג שואג! 🦁❄️',
+    13:'גשר קרח שביר... תזהר!',
+    14:'דוב קוטב מציע אגוזים בתמורה לתשובה 🐻‍❄️',
+    15:'🐉 בוס הדרקון הקפוא!',
+    16:'חתולה הצטרפה אליך! 🐱',
+    17:'מבוך קרח! פתור כדי לצאת 🌀',
+    18:'גמד שלג עם בעיה ❄️',
+    19:'יונים נמסות... חממנו אותן 🕊️',
+    20:'🐲 בוס מלך הקרח! קרב סוף ממלכה!',
+    21:'הטירה האפלה מולנו 🏰',
+    22:'שדים קטנים בכניסה 👹',
+    23:'מדרגות מסתובבות 🌀',
+    24:'אבירים שלדים! 💀',
+    25:'🦇 בוס עטלף ענק!',
+    26:'נשר אדיר הצטרף! 🦅',
+    27:'חידת הקוסם! 🧙',
+    28:'הקרב לפני ההצלה! ⚔️',
+    29:'דלת המגדל 🚪',
+    30:'👑 הקרב האחרון! הצלת הנסיכה!'
+  };
+  return stories[n] || `תחנה ${n}`;
+}
+
+function stationData(n){
+  const isBoss = n % 5 === 0;
+  let world = 'forest', icon = '🌳';
+  if(n > 10){ world='ice'; icon='❄️'; }
+  if(n > 20){ world='castle'; icon='🏰'; }
+  if(isBoss) icon = ['🐺','🦅','🐉','🐲','🦇','👑'][Math.floor((n/5)-1)] || '👹';
+  return {n, world, icon, isBoss, story: getStationStory(n), questions: isBoss?7:5};
+}
+
+const LEVEL_TITLES = [
+  {min:1,max:5,title:'🌱 חוקר צעיר'},
+  {min:6,max:10,title:'⚡ הרפתקן אמיץ'},
+  {min:11,max:15,title:'🛡️ לוחם אמיץ'},
+  {min:16,max:20,title:'🗡️ אביר הממלכה'},
+  {min:21,max:25,title:'🧙 קוסם חכם'},
+  {min:26,max:30,title:'👑 מלך האלופים'}
+];
+function levelTitle(station){
+  for(const t of LEVEL_TITLES){ if(station>=t.min && station<=t.max) return t.title; }
+  return '👑 מלך האלופים';
+}
+
+const ACHIEVEMENTS = [
+  {id:'first', name:'ראשון!', emoji:'🎯', desc:'ענית על השאלה הראשונה'},
+  {id:'streak10', name:'סטריק 10!', emoji:'🔥', desc:'10 תשובות נכונות ברצף'},
+  {id:'streak25', name:'סטריק 25!', emoji:'⚡', desc:'25 תשובות נכונות ברצף'},
+  {id:'stars50', name:'50 כוכבים', emoji:'⭐', desc:'אספת 50 כוכבים'},
+  {id:'stars100', name:'100 כוכבים', emoji:'🌟', desc:'אספת 100 כוכבים'},
+  {id:'stars500', name:'500 כוכבים!', emoji:'💫', desc:'אגדה!'},
+  {id:'abcMaster', name:'ABC מלא', emoji:'🔠', desc:'כל 26 האותיות'},
+  {id:'mult7', name:'לוח 7', emoji:'7️⃣', desc:'שלטת בלוח הכפל 7'},
+  {id:'mult10', name:'לוח 10', emoji:'🔟', desc:'שלטת בלוח 10'},
+  {id:'firstCat', name:'קטגוריה ראשונה', emoji:'🏆', desc:'השלמת קטגוריה ראשונה'},
+  {id:'station10', name:'יער מובס', emoji:'🌲', desc:'סיימת את היער'},
+  {id:'station20', name:'מלך הקרח', emoji:'❄️', desc:'סיימת את ממלכת הקרח'},
+  {id:'rescue', name:'מציל הנסיכה', emoji:'👸', desc:'סיימת את כל המסע!'},
+  {id:'daily7', name:'7 ימים ברצף', emoji:'📅', desc:'נכנסת 7 ימים ברצף'}
+];
+
+/* ============================================================
+   MISSION SYSTEM
+   ============================================================ */
+function generateDailyMission(){
+  const today = todayStr();
+  if(state.missions.daily && state.missions.daily.date === today) return state.missions.daily;
+  const pool = [
+    {id:'math10', text:'ענה על 10 שאלות חשבון', target:10, reward:5, kind:'math'},
+    {id:'eng10', text:'ענה על 10 שאלות אנגלית', target:10, reward:5, kind:'english'},
+    {id:'station3', text:'השלם 3 תחנות במסע', target:3, reward:8, kind:'station'},
+    {id:'streak15', text:'15 תשובות נכונות ברצף', target:15, reward:10, kind:'streak'},
+    {id:'stars20', text:'אסוף 20 כוכבים היום', target:20, reward:5, kind:'stars'}
+  ];
+  const m = pool[Math.floor(Math.random()*pool.length)];
+  state.missions.daily = {...m, progress:0, completed:false, date:today};
+  saveState();
+  return state.missions.daily;
+}
+function progressMission(kind, amount=1){
+  const m = state.missions.daily;
+  if(!m || m.completed || m.kind !== kind) return;
+  m.progress = Math.min(m.target, m.progress + amount);
+  if(m.progress >= m.target && !m.completed){
+    m.completed = true;
+    addStars(m.reward, 'mission');
+    showFeedback(`🎉 משימה הושלמה! +${m.reward} כוכבים`, 'epic');
+    playSound('mission');
+    confettiBurst();
+  }
+  saveState();
+}
+
+/* ============================================================
+   STARS, STREAK, ACHIEVEMENTS
+   ============================================================ */
+function addStars(n=1, source='answer'){
+  const today = todayStr();
+  if(state.stars.lastTodayDate !== today){ state.stars.today = 0; state.stars.lastTodayDate = today; }
+  state.stars.total += n;
+  state.stars.today += n;
+  if(source === 'answer') progressMission('stars', n);
+  saveState();
+  updateTopBar();
+  checkStarAchievements();
+}
+function checkStarAchievements(){
+  const t = state.stars.total;
+  if(t>=50) unlockAchievement('stars50');
+  if(t>=100) unlockAchievement('stars100');
+  if(t>=500) unlockAchievement('stars500');
+}
+function unlockAchievement(id){
+  if(state.achievements.find(a=>a.id===id)) return;
+  const def = ACHIEVEMENTS.find(a=>a.id===id);
+  if(!def) return;
+  state.achievements.push({id, earnedAt:Date.now()});
+  saveState();
+  showFeedback(`🏆 הישג חדש: ${def.emoji} ${def.name}`, 'epic');
+  playSound('levelUp');
+  confettiBurst();
+}
+function updateStreak(correct){
+  if(correct){
+    state.stats.sessionStreak++;
+    if(state.stats.sessionStreak > state.stats.bestStreak) state.stats.bestStreak = state.stats.sessionStreak;
+    if(state.stats.sessionStreak >= 10) unlockAchievement('streak10');
+    if(state.stats.sessionStreak >= 25) unlockAchievement('streak25');
+    progressMission('streak', 1);
+  } else {
+    state.stats.sessionStreak = 0;
+  }
+  saveState();
+}
+function updateDailyStreak(){
+  const today = todayStr();
+  if(state.streak.lastDate === today) return;
+  const y = new Date(); y.setDate(y.getDate()-1);
+  const yest = y.toISOString().slice(0,10);
+  if(state.streak.lastDate === yest){ state.streak.current++; }
+  else if(state.streak.lastDate !== today){ state.streak.current = 1; }
+  state.streak.lastDate = today;
+  if(state.streak.current > state.streak.longest) state.streak.longest = state.streak.current;
+  if(state.streak.current >= 7) unlockAchievement('daily7');
+  saveState();
+}
+
+/* ============================================================
+   FEEDBACK / CONFETTI / SPARKLE
+   ============================================================ */
+function showFeedback(text, kind='right'){
+  const el = document.createElement('div');
+  el.className = `feedback ${kind}`;
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1700);
+}
+function confettiBurst(){
+  const colors = ['#A78BFA','#F472B6','#FBBF24','#34D399','#60A5FA','#FB923C'];
+  for(let i=0;i<60;i++){
+    const el = document.createElement('div');
+    el.className='confetti';
+    el.style.left = (Math.random()*100)+'%';
+    el.style.background = colors[Math.floor(Math.random()*colors.length)];
+    el.style.animation = `confettiFall ${1.5+Math.random()*1.5}s linear ${Math.random()*.4}s forwards`;
+    el.style.transform = `rotate(${Math.random()*360}deg)`;
+    el.style.borderRadius = Math.random()>.5?'50%':'2px';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 3500);
+  }
+}
+function sparkleAt(x,y,n=8){
+  for(let i=0;i<n;i++){
+    const el = document.createElement('div');
+    el.className='sparkle';
+    el.textContent = ['✨','⭐','💫'][Math.floor(Math.random()*3)];
+    el.style.left = x+'px';
+    el.style.top = y+'px';
+    const ang = Math.random()*Math.PI*2;
+    const dist = 60 + Math.random()*60;
+    el.style.setProperty('--dx', Math.cos(ang)*dist+'px');
+    el.style.setProperty('--dy', Math.sin(ang)*dist+'px');
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 1300);
+  }
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+let route = {screen:'home', params:{}};
+const history_ = [];
+function go(screen, params={}){
+  history_.push({...route});
+  route = {screen, params};
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function back(){
+  if(history_.length){ route = history_.pop(); render(); }
+  else { route = {screen:'home',params:{}}; render(); }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ============================================================
+   RENDER ROOT
+   ============================================================ */
+function render(){
+  updateTopBar();
+  document.getElementById('backBtn').classList.toggle('hidden', route.screen==='home');
+  const main = document.getElementById('main');
+  switch(route.screen){
+    case 'home': main.innerHTML = renderHome(); attachHomeEvents(); break;
+    case 'adventure': main.innerHTML = renderAdventureMap(); attachAdventureEvents(); break;
+    case 'station': main.innerHTML = renderStationIntro(route.params); attachStationIntroEvents(); break;
+    case 'english': main.innerHTML = renderEnglishCategories(); attachCatEvents('english'); break;
+    case 'math': main.innerHTML = renderMathCategories(); attachCatEvents('math'); break;
+    case 'mult-grid': main.innerHTML = renderMultGrid(); attachMultGridEvents(); break;
+    case 'play': main.innerHTML = `<div id="playArea"></div>`; startSession(route.params); break;
+    case 'achievements': main.innerHTML = renderAchievements(); break;
+  }
+}
+
+function updateTopBar(){
+  document.getElementById('topAvatar').textContent = state.profile.avatar;
+  document.getElementById('topGreeting').textContent = `שלום ${state.profile.name}!`;
+  document.getElementById('starsPill').textContent = `⭐ ${state.stars.total}`;
+  document.getElementById('streakPill').textContent = `🔥 ${state.streak.current}`;
+}
+
+document.getElementById('backBtn').addEventListener('click', back);
+
+/* ============================================================
+   HOME SCREEN
+   ============================================================ */
+function renderHome(){
+  const m = generateDailyMission();
+  const adv = state.adventure;
+  const completedCount = adv.completed.length;
+  const advProgress = Math.round((completedCount/30)*100);
+  const stationStory = completedCount === 30
+    ? '👸 הנסיכה ניצלה!'
+    : getStationStory(adv.currentStation);
+  const earnedAch = state.achievements.length;
+
+  return `
+  <div class="section">
+    ${m.completed ? `
+      <div class="mission" style="opacity:.7">
+        <div class="label">✅ משימה הושלמה!</div>
+        <div class="title">${m.text}</div>
+        <div class="progress-text">קיבלת ${m.reward} כוכבים</div>
+      </div>` : `
+      <div class="mission">
+        <div class="label">📋 המשימה שלך היום</div>
+        <div class="title">${m.text}</div>
+        <div class="progress"><div class="progress-fill" style="width:${(m.progress/m.target)*100}%"></div></div>
+        <div class="progress-text">${m.progress} / ${m.target} • פרס: ${m.reward} ⭐</div>
+      </div>`}
+
+    <div class="adventure-card tappable" data-go="adventure">
+      <div class="head">🗺️ המסע של אופק</div>
+      <div class="quote">"${stationStory}"</div>
+      <div class="progress"><div class="progress-fill" style="width:${advProgress}%"></div></div>
+      <div class="station-text">תחנה ${Math.min(adv.currentStation,30)}/30 • ${levelTitle(adv.currentStation)}</div>
+    </div>
+
+    <div class="cat-grid" style="margin-bottom:14px">
+      <div class="cat-tile english" data-go="english">
+        <span class="icon">🗣️</span>
+        <div class="title">אנגלית</div>
+        <div class="sub">8 קטגוריות</div>
+      </div>
+      <div class="cat-tile math" data-go="math">
+        <span class="icon">🔢</span>
+        <div class="title">חשבון</div>
+        <div class="sub">5 קטגוריות</div>
+      </div>
+    </div>
+
+    <div class="card tappable" data-go="achievements">
+      <h2 style="font-size:20px;margin:0 0 10px">🏆 ההישגים שלי (${earnedAch}/${ACHIEVEMENTS.length})</h2>
+      <div class="trophy-row">
+        ${ACHIEVEMENTS.slice(0,8).map(a=>{
+          const earned = state.achievements.find(x=>x.id===a.id);
+          return `<div class="trophy ${earned?'':'locked'}" title="${a.name}">${a.emoji}</div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+function attachHomeEvents(){
+  document.querySelectorAll('[data-go]').forEach(el=>{
+    el.addEventListener('click',()=>{ playSound('click'); go(el.dataset.go); });
+  });
+}
+
+/* ============================================================
+   ADVENTURE MAP
+   ============================================================ */
+function renderAdventureMap(){
+  const adv = state.adventure;
+  const stations = [];
+  for(let i=1;i<=30;i++){
+    const sd = stationData(i);
+    const done = adv.completed.includes(i);
+    const current = adv.currentStation === i;
+    const locked = i > adv.currentStation;
+    let cls = 'station';
+    if(sd.isBoss) cls += ' boss';
+    if(done) cls += ' done';
+    else if(current) cls += ' current';
+    else if(locked) cls += ' locked';
+    stations.push(`<div class="${cls}" data-station="${i}" ${locked?'':''}>
+      <span class="num">${i}</span>${done?'✓':sd.icon}
+    </div>`);
+  }
+  let world='היער הקסום 🌳';
+  if(adv.currentStation>10) world='ממלכת הקרח 🧊';
+  if(adv.currentStation>20) world='הטירה האפלה 🏰';
+  if(adv.completed.length===30) world='👑 הנסיכה ניצלה!';
+
+  const companions = [];
+  if(adv.completed.length>=5) companions.push('🐕');
+  if(adv.completed.length>=10) companions.push('🐱');
+  if(adv.completed.length>=20) companions.push('🦅');
+
+  return `
+  <div class="map-wrap">
+    <div class="level-title">${levelTitle(adv.currentStation)}</div>
+    <div class="world-banner">${world}</div>
+    <div class="map-bg">
+      <div class="map-stations">${stations.join('')}</div>
+      <div class="character-row">
+        <span class="char">${state.profile.avatar}</span>
+        ${companions.map(c=>`<span class="char">${c}</span>`).join('')}
+      </div>
+    </div>
+    <div style="text-align:center;padding:14px;color:var(--ink-soft);font-size:14px">
+      🌟 השלימו את כל 30 התחנות כדי להציל את הנסיכה!
+    </div>
+  </div>`;
+}
+function attachAdventureEvents(){
+  document.querySelectorAll('.station').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const n = +el.dataset.station;
+      if(n > state.adventure.currentStation){
+        playSound('wrong');
+        showFeedback('🔒 התחנה נעולה', 'wrong');
+        return;
+      }
+      playSound('click');
+      go('station', {station:n});
+    });
+  });
+}
+
+/* ============================================================
+   STATION INTRO
+   ============================================================ */
+function renderStationIntro({station}){
+  const sd = stationData(station);
+  const isFirst = station===1 && state.adventure.completed.length===0;
+  const isWorldStart = station===11 || station===21;
+  let preStory = '';
+  if(isFirst) preStory = ADVENTURE_STORIES.intro+'<br><br>';
+  if(station===11) preStory = ADVENTURE_STORIES.iceStart+'<br><br>';
+  if(station===21) preStory = ADVENTURE_STORIES.castleStart+'<br><br>';
+  return `
+  <div class="section" style="text-align:center">
+    <div style="font-size:72px;margin:14px 0">${sd.icon}</div>
+    <h2 style="margin-bottom:6px">תחנה ${station}${sd.isBoss?' 👑 בוס!':''}</h2>
+    <div class="bubble">${preStory}${sd.story}</div>
+    <div style="margin:18px 0;color:var(--ink-soft);font-weight:600">
+      ${sd.questions} שאלות • צריך ${Math.ceil(sd.questions*.8)}/${sd.questions} כדי לעבור
+    </div>
+    <button class="btn full" id="startStation">${sd.isBoss?'⚔️ התחל את הקרב!':'🚀 קדימה!'}</button>
+  </div>`;
+}
+function attachStationIntroEvents(){
+  document.getElementById('startStation').addEventListener('click',()=>{
+    playSound('click');
+    go('play', {mode:'station', station:route.params.station});
+  });
+}
+
+/* ============================================================
+   ENGLISH / MATH CATEGORIES
+   ============================================================ */
+function renderEnglishCategories(){
+  return `
+  <div class="section">
+    <h2>🗣️ אנגלית</h2>
+    <div class="subcat-grid">
+      ${ENGLISH_CATEGORIES.map(c=>{
+        const prog = state.english.categories[c.id] || {answered:0, correct:0};
+        const pct = Math.min(100, Math.round((prog.correct||0)/(c.data.length*2)*100));
+        return `<div class="subcat-tile" data-cat="${c.id}">
+          <div class="icon">${c.icon}</div>
+          <div class="name">${c.name}</div>
+          <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:4px">${pct}%</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+function renderMathCategories(){
+  return `
+  <div class="section">
+    <h2>🔢 חשבון</h2>
+    <div class="subcat-grid">
+      ${MATH_CATEGORIES.map(c=>{
+        const prog = state.math.categories[c.id] || {answered:0, correct:0};
+        const pct = Math.min(100, Math.round((prog.correct||0)/40*100));
+        return `<div class="subcat-tile" data-cat="${c.id}">
+          <div class="icon">${c.icon}</div>
+          <div class="name">${c.name}</div>
+          <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+          <div style="font-size:12px;color:var(--ink-soft);margin-top:4px">${pct}%</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+function attachCatEvents(kind){
+  document.querySelectorAll('.subcat-tile').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const cat = el.dataset.cat;
+      playSound('click');
+      if(kind==='math' && cat==='mult'){ go('mult-grid'); return; }
+      go('play', {mode:kind, cat});
+    });
+  });
+}
+
+/* ============================================================
+   MULT GRID
+   ============================================================ */
+function renderMultGrid(){
+  const mastery = state.math.multiplication || {};
+  const tiles = [];
+  for(let t=2;t<=12;t++){
+    const m = mastery[t] || {correct:0, total:0};
+    let cls='mult-tile';
+    if(m.correct >= 12) cls+=' mastered';
+    else if(m.correct >= 5) cls+=' partial';
+    tiles.push(`<div class="${cls}" data-table="${t}">
+      <span class="num">${t}</span>
+      <span class="label">לוח ${t} • ${m.correct||0}/12</span>
+    </div>`);
+  }
+  return `
+  <div class="section">
+    <h2>✖️ לוח הכפל</h2>
+    <p style="margin-bottom:14px;color:var(--ink-soft)">בחר לוח לתרגול. ירוק = שלטת!</p>
+    <div class="mult-grid">${tiles.join('')}</div>
+  </div>`;
+}
+function attachMultGridEvents(){
+  document.querySelectorAll('.mult-tile').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const t = +el.dataset.table;
+      playSound('click');
+      go('play', {mode:'math', cat:'mult', table:t});
+    });
+  });
+}
+
+/* ============================================================
+   ACHIEVEMENTS PAGE
+   ============================================================ */
+function renderAchievements(){
+  return `
+  <div class="section">
+    <h2>🏆 ההישגים שלי</h2>
+    <p style="color:var(--ink-soft);margin-bottom:14px">${state.achievements.length} מתוך ${ACHIEVEMENTS.length}</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px">
+      ${ACHIEVEMENTS.map(a=>{
+        const earned = state.achievements.find(x=>x.id===a.id);
+        return `<div class="card" style="text-align:center;padding:14px;${earned?'':'opacity:.4;filter:grayscale(.6)'}">
+          <div style="font-size:42px">${a.emoji}</div>
+          <div style="font-weight:700;font-size:14px;margin-top:4px">${a.name}</div>
+          <div style="font-size:11px;color:var(--ink-soft);margin-top:2px">${a.desc}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3 style="font-size:18px">📊 הסטטיסטיקות שלך</h3>
+      <p>סך הכוכבים: <b>${state.stars.total} ⭐</b></p>
+      <p>סטריק שיא: <b>${state.stats.bestStreak} 🔥</b></p>
+      <p>שאלות שנענו: <b>${state.stats.totalAnswered}</b></p>
+      <p>תשובות נכונות: <b>${state.stats.totalCorrect}</b></p>
+      <p>אחוז דיוק: <b>${state.stats.totalAnswered?Math.round(state.stats.totalCorrect/state.stats.totalAnswered*100):0}%</b></p>
+      <p>ימים ברצף: <b>${state.streak.current} 🔥</b> (שיא: ${state.streak.longest})</p>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   QUESTION GENERATORS
+   ============================================================ */
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function pickDifferent(a, exclude, n){
+  const opts = a.filter(x=>x!==exclude);
+  return shuffle(opts).slice(0,n);
+}
+
+/* English question — given a list item, build a 4-choice question */
+function makeEnglishQ(item, listAll, type){
+  type = type || pick(['emoji2word','he2en','en2he','typeWord']);
+  if(item.l){ // ABC
+    const subset = listAll;
+    if(type==='emoji2word' || type==='abc-letter'){
+      const wrongs = pickDifferent(subset.map(x=>x.l), item.l, 3);
+      const opts = shuffle([item.l, ...wrongs]);
+      return {
+        prompt:'איזו אות?',
+        content:item.e,
+        contentClass:'q-emoji',
+        choices:opts,
+        answer:item.l,
+        speak:item.w,
+        speakLang:'en-US'
+      };
+    }
+    // letter→word
+    const wrongs = pickDifferent(subset.map(x=>x.w), item.w, 3);
+    return {
+      prompt:'איזו מילה מתחילה באות הזו?',
+      content:item.l,
+      contentClass:'',
+      choices:shuffle([item.w, ...wrongs]),
+      answer:item.w,
+      speak:item.w
+    };
+  }
+  if(item.n!==undefined){ // numbers
+    if(type==='emoji2word' || type==='num2word'){
+      const wrongs = pickDifferent(listAll.map(x=>x.w), item.w, 3);
+      return {prompt:'איך אומרים את המספר?', content:String(item.n), contentClass:'', choices:shuffle([item.w,...wrongs]), answer:item.w, speak:item.w};
+    }
+    if(type==='he2en'){
+      const wrongs = pickDifferent(listAll.map(x=>x.w), item.w, 3);
+      return {prompt:'תרגם לאנגלית', content:item.he, contentClass:'q-content tiny', choices:shuffle([item.w,...wrongs]), answer:item.w, speak:item.w};
+    }
+    const wrongs = pickDifferent(listAll.map(x=>x.n), item.n, 3);
+    return {prompt:'איזה מספר?', content:item.w, contentClass:'q-content small', choices:shuffle([item.n,...wrongs]).map(String), answer:String(item.n), speak:item.w};
+  }
+  // generic list
+  if(type==='emoji2word'){
+    const wrongs = pickDifferent(listAll.map(x=>x.w), item.w, 3);
+    return {prompt:'מה זה באנגלית?', content:item.e, contentClass:'q-emoji', choices:shuffle([item.w,...wrongs]), answer:item.w, speak:item.w};
+  }
+  if(type==='he2en'){
+    const wrongs = pickDifferent(listAll.map(x=>x.w), item.w, 3);
+    return {prompt:'תרגם לאנגלית', content:item.he, contentClass:'q-content tiny', choices:shuffle([item.w,...wrongs]), answer:item.w, speak:item.w};
+  }
+  if(type==='en2he'){
+    const wrongs = pickDifferent(listAll.map(x=>x.he), item.he, 3);
+    return {prompt:'מה זה אומר?', content:item.w, contentClass:'q-content small', choices:shuffle([item.he,...wrongs]), answer:item.he, speak:item.w};
+  }
+  if(type==='typeWord'){
+    return {prompt:'הקלד את המילה באנגלית', content:item.e, contentClass:'q-emoji', input:true, answer:item.w, speak:item.w};
+  }
+  // fallback
+  const wrongs = pickDifferent(listAll.map(x=>x.w), item.w, 3);
+  return {prompt:'מה זה באנגלית?', content:item.e, contentClass:'q-emoji', choices:shuffle([item.w,...wrongs]), answer:item.w, speak:item.w};
+}
+
+/* Math question */
+function makeMathQ(cat, opts={}){
+  const level = opts.level || 1;
+  const table = opts.table;
+  if(cat==='add'){
+    const max = level===1?10:level===2?20:100;
+    const a = Math.floor(Math.random()*max)+1;
+    const b = Math.floor(Math.random()*Math.min(max-a, max))+1;
+    const ans = a+b;
+    const wrongs = uniqueWrongs(ans, max*2, 3);
+    return {prompt:'כמה זה?', content:`${a} + ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), visualDots: a+b<=20?a+b:0, dotsSplit:[a,b]};
+  }
+  if(cat==='sub'){
+    const max = level===1?10:level===2?20:100;
+    const a = Math.floor(Math.random()*max)+1;
+    const b = Math.floor(Math.random()*a)+1;
+    const ans = a-b;
+    const wrongs = uniqueWrongs(ans, max, 3);
+    return {prompt:'כמה זה?', content:`${a} - ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans)};
+  }
+  if(cat==='mult'){
+    const t = table || (Math.floor(Math.random()*11)+2);
+    const b = Math.floor(Math.random()*12)+1;
+    const ans = t*b;
+    const wrongs = uniqueWrongs(ans, 144, 3);
+    return {prompt:`לוח ${t}`, content:`${t} × ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), multTable:t, multFact:b};
+  }
+  if(cat==='div'){
+    const b = Math.floor(Math.random()*9)+2;
+    const ans = Math.floor(Math.random()*9)+2;
+    const a = b*ans;
+    const wrongs = uniqueWrongs(ans, 12, 3);
+    return {prompt:'כמה זה?', content:`${a} ÷ ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans)};
+  }
+  if(cat==='mixed'){
+    return makeMixedChallenge();
+  }
+  return makeMathQ('add', {level:1});
+}
+function uniqueWrongs(ans, max, n){
+  const out = new Set();
+  let tries=0;
+  while(out.size<n && tries<60){
+    const delta = Math.floor(Math.random()*Math.max(6,Math.floor(max/4)))+1;
+    const sign = Math.random()<.5?-1:1;
+    let v = ans + delta*sign;
+    if(v<0) v = ans + delta;
+    if(v!==ans) out.add(v);
+    tries++;
+  }
+  while(out.size<n) out.add(ans + out.size + 1);
+  return [...out];
+}
+function makeMixedChallenge(){
+  const k = pick(['missing','compare','order']);
+  if(k==='missing'){
+    const a = Math.floor(Math.random()*9)+1;
+    const ans = Math.floor(Math.random()*9)+1;
+    const sum = a+ans;
+    const wrongs = uniqueWrongs(ans, 20, 3);
+    return {prompt:'מצא את המספר החסר', content:`${a} + ? = ${sum}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans)};
+  }
+  if(k==='compare'){
+    const a = Math.floor(Math.random()*9)+2, b=Math.floor(Math.random()*9)+2;
+    const c = Math.floor(Math.random()*9)+2, d=Math.floor(Math.random()*9)+2;
+    const v1 = a*b, v2 = c*d;
+    if(v1===v2){ return makeMixedChallenge(); }
+    const ans = v1>v2?`${a}×${b}`:`${c}×${d}`;
+    return {prompt:'מי גדול יותר?', content:`${a}×${b}   ?   ${c}×${d}`, contentClass:'q-content small', choices:[`${a}×${b}`,`${c}×${d}`,'שווים'], answer:ans};
+  }
+  if(k==='order'){
+    const nums = [];
+    while(nums.length<4){ const n=Math.floor(Math.random()*30)+1; if(!nums.includes(n)) nums.push(n); }
+    const sorted = [...nums].sort((x,y)=>x-y);
+    const wrong1 = shuffle([...nums]);
+    const wrong2 = [...nums].sort((x,y)=>y-x);
+    const ans = sorted.join(', ');
+    const choices = shuffle([ans, wrong1.join(', '), wrong2.join(', ')]);
+    return {prompt:'סדר מהקטן לגדול', content:nums.join(', '), contentClass:'q-content small', choices, answer:ans};
+  }
+}
+
+/* ============================================================
+   PLAY SESSION
+   ============================================================ */
+let session = null;
+function startSession(params){
+  session = {
+    params,
+    questions:[],
+    current:0,
+    correct:0,
+    answered:0,
+    pass: params.mode==='station' ? Math.ceil((stationData(params.station).questions)*.8) : null,
+    total: params.mode==='station' ? stationData(params.station).questions : 10,
+    locked:false
+  };
+  buildQuestions();
+  renderQuestion();
+}
+
+function buildQuestions(){
+  const p = session.params;
+  if(p.mode==='station'){
+    const sd = stationData(p.station);
+    for(let i=0;i<sd.questions;i++){
+      session.questions.push(buildOneStationQuestion(p.station));
+    }
+  } else if(p.mode==='english'){
+    const cat = ENGLISH_CATEGORIES.find(c=>c.id===p.cat);
+    for(let i=0;i<10;i++){
+      const item = pick(cat.data);
+      const types = cat.type==='abc' ? ['emoji2word','letter2word'] :
+                    cat.type==='numbers' ? ['emoji2word','he2en','word2num'] :
+                    ['emoji2word','he2en','en2he'];
+      session.questions.push({...makeEnglishQ(item, cat.data, pick(types)), domain:'english'});
+    }
+  } else if(p.mode==='math'){
+    const cat = p.cat;
+    if(cat==='mult' && p.table){
+      const facts = shuffle(Array.from({length:12}, (_,i)=>i+1));
+      for(let i=0;i<10;i++){
+        const b = facts[i % facts.length];
+        const ans = p.table*b;
+        const wrongs = uniqueWrongs(ans, 144, 3);
+        session.questions.push({prompt:`לוח ${p.table}`, content:`${p.table} × ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), multTable:p.table, multFact:b, domain:'math'});
+      }
+    } else {
+      for(let i=0;i<10;i++){
+        const lvl = (i<3)?1:(i<7)?2:3;
+        session.questions.push({...makeMathQ(cat,{level:lvl}), domain:'math'});
+      }
+    }
+  }
+}
+
+function buildOneStationQuestion(stationN){
+  // Mix English and Math, difficulty scales with station number
+  const useMath = Math.random() < .5;
+  if(useMath){
+    let cat, level;
+    if(stationN<=10){ cat = pick(['add','sub']); level = 1; }
+    else if(stationN<=20){ cat = pick(['add','sub','mult']); level = 2; }
+    else { cat = pick(['add','sub','mult','div','mixed']); level = stationN<=25?2:3; }
+    return {...makeMathQ(cat,{level}), domain:'math'};
+  } else {
+    const allCats = stationN<=10 ? ENGLISH_CATEGORIES.slice(0,4)
+                  : stationN<=20 ? ENGLISH_CATEGORIES.slice(0,6)
+                  : ENGLISH_CATEGORIES;
+    const cat = pick(allCats);
+    const item = pick(cat.data);
+    const types = cat.type==='abc' ? ['emoji2word','letter2word']
+               : cat.type==='numbers' ? ['emoji2word','he2en']
+               : ['emoji2word','he2en','en2he'];
+    return {...makeEnglishQ(item, cat.data, pick(types)), domain:'english'};
+  }
+}
+
+function renderQuestion(){
+  const q = session.questions[session.current];
+  if(!q){ return finishSession(); }
+  const total = session.questions.length;
+  const pct = ((session.current)/total)*100;
+
+  const dots = q.visualDots ? `<div class="dots-vis">${'🔵'.repeat(q.dotsSplit[0])} ${q.dotsSplit[1]?'+ ':''}${'🟢'.repeat(q.dotsSplit[1]||0)}</div>`:'';
+
+  let bodyHTML = '';
+  if(q.input){
+    bodyHTML = `
+      <div class="type-row">
+        <input type="text" id="answerInput" class="type-input" autocomplete="off" autocapitalize="off" placeholder="הקלד כאן..."/>
+      </div>
+      <button class="btn full" id="submitBtn" style="margin-top:10px">בדוק תשובה</button>
+    `;
+  } else {
+    bodyHTML = `<div class="choices">
+      ${q.choices.map((c,i)=>`<button class="choice" data-choice="${i}">${c}</button>`).join('')}
+    </div>`;
+  }
+
+  const speakBtn = q.speak ? `<button class="speak-btn" id="speakBtn">🔊 שמע</button>` : '';
+
+  document.getElementById('main').innerHTML = `
+  <div class="question-wrap">
+    <div class="q-header">
+      <span>${session.current+1}/${total}</span>
+      <div class="q-progress"><div class="q-progress-fill" style="width:${pct}%"></div></div>
+      <span>⭐ ${session.correct}</span>
+    </div>
+    <div class="q-card">
+      <div class="q-prompt">${q.prompt}</div>
+      <div class="${q.contentClass||'q-content'}">${q.content}</div>
+      ${dots}
+      ${speakBtn}
+    </div>
+    ${bodyHTML}
+  </div>`;
+
+  if(q.speak) document.getElementById('speakBtn').addEventListener('click', ()=>speak(q.speak, q.speakLang||'en-US'));
+  if(q.input){
+    const inp = document.getElementById('answerInput');
+    inp.focus();
+    inp.addEventListener('keydown',(e)=>{ if(e.key==='Enter') submitTyped(); });
+    document.getElementById('submitBtn').addEventListener('click', submitTyped);
+  } else {
+    document.querySelectorAll('.choice').forEach(el=>{
+      el.addEventListener('click',()=>chooseAnswer(+el.dataset.choice));
+    });
+  }
+}
+
+function chooseAnswer(idx){
+  if(session.locked) return;
+  const q = session.questions[session.current];
+  const chosen = q.choices[idx];
+  const correct = String(chosen) === String(q.answer);
+  handleAnswer(correct, idx);
+}
+function submitTyped(){
+  if(session.locked) return;
+  const q = session.questions[session.current];
+  const val = document.getElementById('answerInput').value.trim().toLowerCase();
+  const correct = val === String(q.answer).toLowerCase();
+  handleAnswer(correct, null);
+}
+
+function handleAnswer(correct, idx){
+  session.locked = true;
+  session.answered++;
+  state.stats.totalAnswered++;
+  if(correct){
+    session.correct++;
+    state.stats.totalCorrect++;
+    addStars(1, 'answer');
+    playSound('right');
+    showFeedback('🎉 כל הכבוד!', 'right');
+    updateStreak(true);
+    if(state.stats.totalCorrect===1) unlockAchievement('first');
+    // mark choice
+    if(idx!==null){ document.querySelectorAll('.choice').forEach((el,i)=>{ if(i===idx) el.classList.add('right'); else el.classList.add('dim'); }); }
+    // tts
+    const q = session.questions[session.current];
+    if(q.speak) setTimeout(()=>speak(q.speak, q.speakLang||'en-US'), 200);
+    // sparkle
+    const r = (idx!==null?document.querySelectorAll('.choice')[idx]:document.querySelector('.q-card')).getBoundingClientRect();
+    sparkleAt(r.left+r.width/2, r.top+r.height/2, 6);
+    // mission progress
+    const dom = q.domain || 'english';
+    if(session.params.mode==='math' || dom==='math') progressMission('math',1);
+    if(session.params.mode==='english' || dom==='english') progressMission('english',1);
+    // multiplication mastery
+    if(q.multTable){
+      state.math.multiplication[q.multTable] = state.math.multiplication[q.multTable]||{correct:0,total:0};
+      state.math.multiplication[q.multTable].correct++;
+      state.math.multiplication[q.multTable].total++;
+      if(q.multTable===7 && state.math.multiplication[7].correct>=12) unlockAchievement('mult7');
+      if(q.multTable===10 && state.math.multiplication[10].correct>=12) unlockAchievement('mult10');
+      saveState();
+    }
+    // english category progress
+    if(session.params.mode==='english'){
+      const cat = session.params.cat;
+      state.english.categories[cat] = state.english.categories[cat] || {answered:0, correct:0};
+      state.english.categories[cat].answered++;
+      state.english.categories[cat].correct++;
+      if(cat==='abc' && state.english.categories.abc.correct>=26) unlockAchievement('abcMaster');
+      saveState();
+    }
+    if(session.params.mode==='math'){
+      const cat = session.params.cat;
+      state.math.categories[cat] = state.math.categories[cat] || {answered:0, correct:0};
+      state.math.categories[cat].answered++;
+      state.math.categories[cat].correct++;
+      saveState();
+    }
+  } else {
+    playSound('wrong');
+    showFeedback('🤔 ננסה שוב!', 'wrong');
+    updateStreak(false);
+    if(idx!==null){
+      document.querySelectorAll('.choice').forEach((el,i)=>{
+        if(i===idx) el.classList.add('wrong');
+        if(String(session.questions[session.current].choices[i])===String(session.questions[session.current].answer)) el.classList.add('right');
+      });
+    } else {
+      const inp = document.getElementById('answerInput');
+      if(inp) inp.classList.add('wrong'), inp.style.borderColor='#EF4444';
+      const correctBox = document.createElement('div');
+      correctBox.style.cssText='text-align:center;color:#EF4444;font-weight:700;margin-top:10px;font-size:18px';
+      correctBox.textContent = `התשובה: ${session.questions[session.current].answer}`;
+      document.querySelector('.question-wrap').appendChild(correctBox);
+    }
+  }
+  saveState();
+  setTimeout(()=>{
+    session.current++;
+    session.locked = false;
+    if(session.current >= session.questions.length) finishSession();
+    else renderQuestion();
+  }, correct ? 1100 : 1900);
+}
+
+function finishSession(){
+  const p = session.params;
+  const correct = session.correct;
+  const total = session.questions.length;
+  const pct = Math.round(correct/total*100);
+
+  if(p.mode==='station'){
+    const sd = stationData(p.station);
+    const need = Math.ceil(sd.questions*.8);
+    const passed = correct>=need;
+    if(passed){
+      if(!state.adventure.completed.includes(p.station)){
+        state.adventure.completed.push(p.station);
+        if(p.station===state.adventure.currentStation){
+          state.adventure.currentStation = Math.min(31, p.station+1);
+        }
+        progressMission('station',1);
+      }
+      // companion unlocks
+      if(p.station===5 && !state.adventure.companions.includes('🐕')) state.adventure.companions.push('🐕');
+      if(p.station===10){ state.adventure.companions.push('🐱'); unlockAchievement('station10'); }
+      if(p.station===20){ state.adventure.companions.push('🦅'); unlockAchievement('station20'); }
+      if(p.station===30){ unlockAchievement('rescue'); }
+      saveState();
+      playSound('levelUp');
+      confettiBurst();
+    } else {
+      playSound('wrong');
+    }
+    document.getElementById('main').innerHTML = `
+      <div class="section" style="text-align:center;padding-top:40px">
+        <div style="font-size:96px">${passed?(p.station===30?'👸':'🎉'):'😢'}</div>
+        <h2 style="margin:14px 0">${passed?(p.station===30?'הצלת את הנסיכה!':'תחנה הושלמה!'):'נסה שוב!'}</h2>
+        <div class="card" style="margin:14px 0">
+          <div style="font-size:28px;font-weight:700">${correct}/${total}</div>
+          <div style="color:var(--ink-soft)">${pct}% תשובות נכונות</div>
+          <div style="margin-top:10px;color:var(--primary-dark);font-weight:700">+${correct} ⭐</div>
+        </div>
+        ${passed && p.station<30 ? `<div class="bubble">תחנה ${p.station+1} פתוחה! 🚀</div>`:''}
+        ${p.station===30 && passed ? `<div class="bubble">${ADVENTURE_STORIES.rescue}</div>`:''}
+        <button class="btn full" onclick="go('adventure')" style="margin-top:14px">חזור למפה</button>
+        <button class="btn ghost full" onclick="go('home')" style="margin-top:8px">לעמוד הבית</button>
+      </div>`;
+  } else {
+    if(pct>=80 && p.mode==='english' && !state.achievements.find(a=>a.id==='firstCat')) unlockAchievement('firstCat');
+    document.getElementById('main').innerHTML = `
+      <div class="section" style="text-align:center;padding-top:40px">
+        <div style="font-size:96px">${pct>=80?'🌟':pct>=50?'👍':'💪'}</div>
+        <h2 style="margin:14px 0">${pct>=80?'מצוין!':pct>=50?'טוב מאוד!':'תרגול עושה את המורה!'}</h2>
+        <div class="card" style="margin:14px 0">
+          <div style="font-size:28px;font-weight:700">${correct}/${total}</div>
+          <div style="color:var(--ink-soft)">${pct}% תשובות נכונות</div>
+          <div style="margin-top:10px;color:var(--primary-dark);font-weight:700">+${correct} ⭐</div>
+        </div>
+        <button class="btn full" onclick="go('${p.mode}')">עוד תרגול</button>
+        <button class="btn ghost full" onclick="go('home')" style="margin-top:8px">לעמוד הבית</button>
+      </div>`;
+    if(pct>=80) confettiBurst();
+  }
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+const MODAL_CONTENT = {
+  privacy: `<h3>🔒 מדיניות פרטיות</h3>
+    <p><b>הילדים שלכם בטוחים אצלנו.</b></p>
+    <p>אנו לא אוספים מידע אישי. כל ההתקדמות, ההישגים והכוכבים נשמרים <b>אך ורק במכשיר שלכם</b> (localStorage).</p>
+    <ul>
+      <li>אין רישום, אין סיסמאות, אין שרת</li>
+      <li>אין מעקב, אין פרסומות, אין צד שלישי</li>
+      <li>הנתונים נמחקים כשמוחקים את הדפדפן או לוחצים "איפוס התקדמות"</li>
+      <li>אין שיתוף מידע עם אף גורם</li>
+    </ul>
+    <p>שאלות? <a href="https://wa.me/972508668022">דברו איתנו בוואטסאפ</a></p>`,
+  terms: `<h3>📋 תנאי שימוש</h3>
+    <p>השימוש באתר מותנה בהסכמה לתנאים אלה.</p>
+    <ul>
+      <li>השירות ניתן חינם לחלוטין, ללא התחייבויות.</li>
+      <li>התוכן הוא חינוכי ומיועד לשימוש משפחתי.</li>
+      <li>אנו עושים את מירב המאמצים לוודא דיוק התוכן, אך לא מתחייבים לזמינות מתמשכת או לחוסר תקלות.</li>
+      <li>לא נישא באחריות לכל נזק עקיף שייגרם משימוש בתוכן.</li>
+      <li>מומלץ ליווי הורי במהלך השימוש.</li>
+    </ul>
+    <p>נבנה ע"י lior_Ai 🎓</p>`,
+  accessibility: `<h3>♿ הצהרת נגישות</h3>
+    <p>אתר זה מתחייב לנגישות ושוויון לכל המשתמשים, בהתאם לתקן הישראלי 5568 ולתקן WCAG 2.1 ברמה AA.</p>
+    <p><b>תכונות נגישות:</b></p>
+    <ul>
+      <li>תפריט נגישות בכפתור הכחול (פינה ימנית תחתונה)</li>
+      <li>גודל פונט מתאים לקריאה (18px+)</li>
+      <li>ניגודיות צבעים גבוהה</li>
+      <li>תאימות מלאה לקוראי מסך</li>
+      <li>ניווט באמצעות מקלדת</li>
+      <li>תמיכה ב-RTL מלאה</li>
+      <li>אייקונים ברורים ותווית טקסט</li>
+    </ul>
+    <p><b>רכז הנגישות:</b> ליאור בלול</p>
+    <p><b>צור קשר:</b> <a href="https://wa.me/972508668022">972508668022</a></p>
+    <p>נתקלת בבעיית נגישות? נשמח לתקן בהקדם.</p>`,
+  a11y: `<h3>♿ הגדרות נגישות</h3>
+    <div class="a11y-panel">
+      <button onclick="toggleA11y('a11y-large')">🔍 הגדל פונט</button>
+      <button onclick="toggleA11y('a11y-xlarge')">🔍🔍 פונט ענק</button>
+      <button onclick="toggleA11y('a11y-contrast')">🌗 ניגודיות גבוהה</button>
+      <button onclick="toggleA11y('a11y-mono')">⚫ מונוכרום</button>
+      <button onclick="toggleA11y('a11y-readable')">📖 פונט קריא</button>
+      <button onclick="toggleA11y('a11y-no-anim')">⏸️ ביטול אנימציות</button>
+      <button onclick="toggleA11y('a11y-links')">🔗 הדגשת קישורים</button>
+      <button onclick="toggleSound()">🔊 הפעל/כבה צלילים</button>
+      <button onclick="toggleTTS()">🗣️ הפעל/כבה הקראה</button>
+      <button onclick="resetA11y()" style="background:#FEE2E2;color:#991B1B">🔄 איפוס נגישות</button>
+    </div>
+    <p style="margin-top:14px;font-size:13px;color:var(--ink-soft)">לפרטים נוספים על נגישות:</p>
+    <button class="btn ghost full" onclick="openModal('accessibility')">הצהרת נגישות</button>`
+};
+function openModal(name){
+  document.getElementById('modalContent').innerHTML = MODAL_CONTENT[name];
+  document.getElementById('modalBg').classList.add('show');
+}
+function closeModal(){ document.getElementById('modalBg').classList.remove('show'); }
+function toggleA11y(cls){ document.body.classList.toggle(cls); }
+function toggleSound(){ state.settings.soundEnabled = !state.settings.soundEnabled; saveState(); alert(state.settings.soundEnabled?'🔊 צלילים מופעלים':'🔇 צלילים כבויים'); }
+function toggleTTS(){ state.settings.ttsEnabled = !state.settings.ttsEnabled; saveState(); alert(state.settings.ttsEnabled?'🗣️ הקראה מופעלת':'הקראה כבויה'); }
+function resetA11y(){ ['a11y-large','a11y-xlarge','a11y-contrast','a11y-mono','a11y-readable','a11y-no-anim','a11y-links'].forEach(c=>document.body.classList.remove(c)); }
+
+/* ============================================================
+   PWA INSTALL
+   ============================================================ */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  setTimeout(()=>document.getElementById('installBanner').classList.add('show'), 6000);
+});
+function doInstall(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(()=>{ deferredPrompt = null; document.getElementById('installBanner').classList.remove('show'); });
+}
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  });
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+updateDailyStreak();
+generateDailyMission();
+render();
+
+</script>
+</body>
+</html>

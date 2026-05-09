@@ -1,0 +1,28 @@
+{
+  "name": "lior_Ai – לימוד לילדים",
+  "short_name": "lior_Ai לימוד",
+  "description": "משחק חינוכי חינם לילדים – אנגלית, חשבון, לוח הכפל, מסע הרפתקאות",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EDE9FE",
+  "theme_color": "#A78BFA",
+  "lang": "he",
+  "dir": "rtl",
+  "categories": ["education", "kids", "games"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
