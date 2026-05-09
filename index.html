@@ -364,9 +364,11 @@ body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
 .welcome-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(245,158,11,.55)}
 .welcome-hint{margin-top:14px;font-size:13px;color:var(--ink-soft)}
 
-/* force LTR for numbers/math (avoids RTL reversing "4, 8, 15" into "15, 8, 4") */
-.ltr{direction:ltr;unicode-bidi:isolate;text-align:center}
-.ltr-inline{direction:ltr;unicode-bidi:isolate;display:inline-block}
+/* force LTR for numbers/math — bidi-override is stronger than isolate and
+   guarantees the visual order matches the source order even for neutral
+   characters like "-", "+", "×", ÷", ",", "?", "=" surrounded by digits */
+.ltr{direction:ltr;unicode-bidi:bidi-override;text-align:center}
+.ltr-inline{direction:ltr;unicode-bidi:bidi-override;display:inline-block}
 
 /* hidden helper */
 .hidden{display:none!important}
