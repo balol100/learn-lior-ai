@@ -242,6 +242,9 @@ img{max-width:100%}
 .station.boss{background:linear-gradient(135deg,#EF4444,#7C2D12);border-color:#FCD34D}
 .station.boss.done{background:linear-gradient(135deg,#10B981,#065F46)}
 .station.locked{opacity:.5}
+.station.age-locked-station{opacity:.4;filter:saturate(.4)}
+.subcat-tile.age-locked{opacity:.55;filter:saturate(.45);cursor:not-allowed}
+.subcat-tile.age-locked:hover{transform:none;border-color:#E0E7FF}
 .station .num{font-size:14px;position:absolute;top:2px;right:4px;font-weight:700;background:rgba(0,0,0,.3);padding:0 4px;border-radius:4px}
 .character-row{display:flex;justify-content:center;gap:10px;font-size:54px;margin-top:18px}
 .character-row .char{animation:bob 2s infinite ease-in-out}
@@ -369,6 +372,22 @@ body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
 }
 .welcome-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(245,158,11,.55)}
 .welcome-hint{margin-top:14px;font-size:13px;color:var(--ink-soft)}
+.age-list{display:flex;flex-direction:column;gap:10px;margin:16px 0 4px}
+.age-btn{
+  min-height:56px;padding:10px 16px;border-radius:16px;border:3px solid #C7D2FE;
+  background:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;
+  gap:12px;text-align:right;color:var(--ink);transition:.15s;font-family:inherit;
+}
+.age-btn:hover{background:#FAF5FF;border-color:var(--primary);transform:translateY(-2px)}
+.age-btn.selected{background:linear-gradient(135deg,#FCD34D,#F59E0B);color:#7C2D12;border-color:#F59E0B;box-shadow:0 6px 16px rgba(245,158,11,.35)}
+.age-btn .em{font-size:28px;line-height:1}
+.age-btn .text{flex:1}
+.age-tag{
+  display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;
+  background:linear-gradient(135deg,#A78BFA,#7C3AED);color:#fff;font-size:12px;font-weight:700;
+  margin-right:6px;vertical-align:middle;white-space:nowrap;
+}
+.lock-label{font-size:11px;font-weight:700;color:#DC2626;margin-top:4px}
 
 /* force LTR for numbers/math — bidi-override is stronger than isolate and
    guarantees the visual order matches the source order even for neutral
@@ -426,6 +445,7 @@ body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
     <div>📱 וואטסאפ: <a href="https://wa.me/972508668022">972508668022</a></div>
     <div class="links">
       <button onclick="changeName()">✏️ שנה שם</button>
+      <button onclick="changeAge()">🎂 שנה גיל</button>
       <button onclick="openModal('privacy')">פרטיות</button>
       <button onclick="openModal('accessibility')">נגישות</button>
       <button onclick="openModal('terms')">תנאי שימוש</button>
@@ -445,14 +465,7 @@ body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
 
 <!-- ============ WELCOME OVERLAY ============ -->
 <div class="welcome-bg" id="welcomeBg">
-  <div class="welcome-card">
-    <div class="welcome-emoji">👋</div>
-    <h2 class="welcome-title">שלום!</h2>
-    <p class="welcome-sub">מה השם שלך?</p>
-    <input type="text" id="welcomeName" class="welcome-input" placeholder="הקלד את השם שלך" maxlength="20" autocomplete="given-name"/>
-    <button class="welcome-btn" id="welcomeBtn">יאללה! 🚀</button>
-    <p class="welcome-hint">אפשר גם לדלג — נקרא לך "חבר/ה"</p>
-  </div>
+  <div class="welcome-card" id="welcomeCard"></div>
 </div>
 
 <!-- ============ MODALS ============ -->
@@ -469,7 +482,7 @@ body.a11y-links a,body.a11y-links button{text-decoration:underline!important}
    ============================================================ */
 const STORAGE_KEY = 'learn-lior-progress';
 const DEFAULT_STATE = {
-  profile: { name: '', avatar: '👦', createdAt: Date.now() },
+  profile: { name: '', avatar: '👦', ageGroup: '', createdAt: Date.now() },
   adventure: { currentStation: 1, completed: [], companions: [] },
   english: { categories: {}, abc: {} },
   math: { categories: {}, multiplication: {} },
@@ -738,6 +751,49 @@ function levelUpMessage(justFinishedStation){
   return '';
 }
 
+const AGE_GROUPS = [
+  {id:'3-4', emoji:'👶', label:'גיל 3-4 (גן)', short:'3-4',
+    math:{cats:['add'], maxAdd:5, maxSub:0, multTables:[], allowDiv:false, allowMixed:false},
+    english:{cats:['colors','animals','numbers'], abcMax:0, maxNumbers:10, types:['emoji2word']},
+    adventure:{maxStation:10, passRatio:0.6}
+  },
+  {id:'5-6', emoji:'🧒', label:'גיל 5-6 (גן חובה – כיתה א)', short:'5-6',
+    math:{cats:['add','sub','mult'], maxAdd:10, maxSub:10, multTables:[2,3], allowDiv:false, allowMixed:false},
+    english:{cats:['abc','colors','animals','numbers','family','food'], abcMax:10, maxNumbers:20, types:['emoji2word','he2en']},
+    adventure:{maxStation:15, passRatio:0.8}
+  },
+  {id:'7-8', emoji:'👦', label:'גיל 7-8 (כיתה ב-ג)', short:'7-8',
+    math:{cats:['add','sub','mult','div'], maxAdd:20, maxSub:20, multTables:[2,3,4,5], allowDiv:true, allowMixed:false},
+    english:{cats:'all', abcMax:26, maxNumbers:20, types:['emoji2word','he2en','en2he']},
+    adventure:{maxStation:20, passRatio:0.8}
+  },
+  {id:'9-10', emoji:'🧑', label:'גיל 9-10 (כיתה ד-ה)', short:'9-10',
+    math:{cats:['add','sub','mult','div','mixed'], maxAdd:100, maxSub:100, multTables:[2,3,4,5,6,7,8,9,10,11,12], allowDiv:true, allowMixed:true},
+    english:{cats:'all', abcMax:26, maxNumbers:20, types:['emoji2word','he2en','en2he','typeWord']},
+    adventure:{maxStation:25, passRatio:0.8}
+  },
+  {id:'11+', emoji:'👨‍🎓', label:'גיל 11+ (כיתה ו ומעלה)', short:'11+',
+    math:{cats:['add','sub','mult','div','mixed'], maxAdd:100, maxSub:100, multTables:[2,3,4,5,6,7,8,9,10,11,12], allowDiv:true, allowMixed:true},
+    english:{cats:'all', abcMax:26, maxNumbers:20, types:['emoji2word','he2en','en2he','typeWord']},
+    adventure:{maxStation:30, passRatio:0.8}
+  }
+];
+function ageConfig(){
+  const id = state.profile.ageGroup;
+  return AGE_GROUPS.find(g=>g.id===id) || AGE_GROUPS[2]; // default 7-8
+}
+function isMathCatUnlocked(catId){ return ageConfig().math.cats.includes(catId); }
+function isEnglishCatUnlocked(catId){
+  const c = ageConfig().english.cats;
+  return c === 'all' || c.includes(catId);
+}
+function firstAgeUnlockingMath(catId){
+  return AGE_GROUPS.find(g=>g.math.cats.includes(catId))?.short || '7-8';
+}
+function firstAgeUnlockingEnglish(catId){
+  return AGE_GROUPS.find(g=>(g.english.cats==='all'||g.english.cats.includes(catId)))?.short || '7-8';
+}
+
 const ACHIEVEMENTS = [
   {id:'first', name:'ראשון!', emoji:'🎯', desc:'ענית על השאלה הראשונה'},
   {id:'streak10', name:'סטריק 10!', emoji:'🔥', desc:'10 תשובות נכונות ברצף'},
@@ -920,9 +976,10 @@ function render(){
 function updateTopBar(){
   document.getElementById('topAvatar').textContent = state.profile.avatar;
   const isReturn = state.streak.current > 1 && state.streak.lastDate === todayStr() && route.screen === 'home';
-  document.getElementById('topGreeting').textContent = isReturn
-    ? `שלום ${getName()}, חזרת!`
-    : `שלום ${getName()}!`;
+  const baseGreeting = isReturn ? `שלום ${getName()}, חזרת!` : `שלום ${getName()}!`;
+  const cfg = state.profile.ageGroup ? ageConfig() : null;
+  const ageTag = cfg ? `<span class="age-tag">${cfg.emoji} ${cfg.short}</span>` : '';
+  document.getElementById('topGreeting').innerHTML = baseGreeting + ageTag;
   document.getElementById('starsPill').textContent = `⭐ ${state.stars.total}`;
   document.getElementById('streakPill').textContent = `🔥 ${state.streak.current}`;
 }
@@ -999,19 +1056,23 @@ function attachHomeEvents(){
    ============================================================ */
 function renderAdventureMap(){
   const adv = state.adventure;
+  const maxAge = ageConfig().adventure.maxStation;
   const stations = [];
   for(let i=1;i<=30;i++){
     const sd = stationData(i);
     const done = adv.completed.includes(i);
-    const current = adv.currentStation === i;
-    const locked = i > adv.currentStation;
+    const current = adv.currentStation === i && i<=maxAge;
+    const ageLocked = i > maxAge;
+    const progLocked = i > adv.currentStation;
+    const locked = ageLocked || progLocked;
     let cls = 'station';
     if(sd.isBoss) cls += ' boss';
     if(done) cls += ' done';
     else if(current) cls += ' current';
     else if(locked) cls += ' locked';
-    stations.push(`<div class="${cls}" data-station="${i}" ${locked?'':''}>
-      <span class="num">${i}</span>${done?'✓':sd.icon}
+    if(ageLocked) cls += ' age-locked-station';
+    stations.push(`<div class="${cls}" data-station="${i}" data-age-locked="${ageLocked}">
+      <span class="num">${i}</span>${done?'✓':(ageLocked?'🔒':sd.icon)}
     </div>`);
   }
   let world='היער הקסום 🌳';
@@ -1044,6 +1105,11 @@ function attachAdventureEvents(){
   document.querySelectorAll('.station').forEach(el=>{
     el.addEventListener('click',()=>{
       const n = +el.dataset.station;
+      if(el.dataset.ageLocked === 'true'){
+        playSound('wrong');
+        showFeedback('🔒 פתח קבוצת גיל גבוהה יותר', 'wrong');
+        return;
+      }
       if(n > state.adventure.currentStation){
         playSound('wrong');
         showFeedback('🔒 התחנה נעולה', 'wrong');
@@ -1072,7 +1138,7 @@ function renderStationIntro({station}){
     <h2 style="margin-bottom:6px">תחנה ${station}${sd.isBoss?' 👑 בוס!':''}</h2>
     <div class="bubble">${preStory}${sd.story}</div>
     <div style="margin:18px 0;color:var(--ink-soft);font-weight:600">
-      ${sd.questions} שאלות • צריך ${Math.ceil(sd.questions*.8)}/${sd.questions} כדי לעבור
+      ${sd.questions} שאלות • צריך ${Math.ceil(sd.questions*ageConfig().adventure.passRatio)}/${sd.questions} כדי לעבור
     </div>
     <button class="btn full" id="startStation">${sd.isBoss?'⚔️ התחל את הקרב!':'🚀 קדימה!'}</button>
   </div>`;
@@ -1095,11 +1161,15 @@ function renderEnglishCategories(){
       ${ENGLISH_CATEGORIES.map(c=>{
         const prog = state.english.categories[c.id] || {answered:0, correct:0};
         const pct = Math.min(100, Math.round((prog.correct||0)/(c.data.length*2)*100));
-        return `<div class="subcat-tile" data-cat="${c.id}">
+        const unlocked = isEnglishCatUnlocked(c.id);
+        const unlockAge = unlocked ? '' : firstAgeUnlockingEnglish(c.id);
+        return `<div class="subcat-tile${unlocked?'':' age-locked'}" data-cat="${c.id}" data-locked="${!unlocked}">
           <div class="icon">${c.icon}</div>
           <div class="name">${c.name}</div>
-          <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-          <div style="font-size:12px;color:var(--ink-soft);margin-top:4px">${pct}%</div>
+          ${unlocked
+            ? `<div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+               <div style="font-size:12px;color:var(--ink-soft);margin-top:4px">${pct}%</div>`
+            : `<div class="lock-label">🔒 לגיל ${unlockAge}+</div>`}
         </div>`;
       }).join('')}
     </div>
@@ -1113,11 +1183,15 @@ function renderMathCategories(){
       ${MATH_CATEGORIES.map(c=>{
         const prog = state.math.categories[c.id] || {answered:0, correct:0};
         const pct = Math.min(100, Math.round((prog.correct||0)/40*100));
-        return `<div class="subcat-tile" data-cat="${c.id}">
+        const unlocked = isMathCatUnlocked(c.id);
+        const unlockAge = unlocked ? '' : firstAgeUnlockingMath(c.id);
+        return `<div class="subcat-tile${unlocked?'':' age-locked'}" data-cat="${c.id}" data-locked="${!unlocked}">
           <div class="icon">${c.icon}</div>
           <div class="name">${c.name}</div>
-          <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-          <div style="font-size:12px;color:var(--ink-soft);margin-top:4px">${pct}%</div>
+          ${unlocked
+            ? `<div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+               <div style="font-size:12px;color:var(--ink-soft);margin-top:4px">${pct}%</div>`
+            : `<div class="lock-label">🔒 לגיל ${unlockAge}+</div>`}
         </div>`;
       }).join('')}
     </div>
@@ -1126,6 +1200,11 @@ function renderMathCategories(){
 function attachCatEvents(kind){
   document.querySelectorAll('.subcat-tile').forEach(el=>{
     el.addEventListener('click',()=>{
+      if(el.dataset.locked === 'true'){
+        playSound('wrong');
+        showFeedback('🔒 פתח קבוצת גיל גבוהה יותר', 'wrong');
+        return;
+      }
       const cat = el.dataset.cat;
       playSound('click');
       if(kind==='math' && cat==='mult'){ go('mult-grid'); return; }
@@ -1285,16 +1364,20 @@ function makeEnglishQ(item, listAll, type){
 function makeMathQ(cat, opts={}){
   const level = opts.level || 1;
   const table = opts.table;
+  const mcfg = ageConfig().math;
   if(cat==='add'){
-    const max = level===1?10:level===2?20:100;
-    const a = Math.floor(Math.random()*max)+1;
-    const b = Math.floor(Math.random()*Math.min(max-a, max))+1;
+    const baseMax = level===1?10:level===2?20:100;
+    const max = Math.max(2, Math.min(baseMax, mcfg.maxAdd));
+    const a = Math.floor(Math.random()*(max-1))+1;
+    const b = Math.floor(Math.random()*(max-a))+1;
     const ans = a+b;
     const wrongs = uniqueWrongs(ans, max*2, 3);
     return {prompt:'כמה זה?', content:`${a} + ${b}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), visualDots: a+b<=20?a+b:0, dotsSplit:[a,b], ltrChoices:true};
   }
   if(cat==='sub'){
-    const max = level===1?10:level===2?20:100;
+    if(mcfg.maxSub<=0) return makeMathQ('add', opts);
+    const baseMax = level===1?10:level===2?20:100;
+    const max = Math.max(2, Math.min(baseMax, mcfg.maxSub));
     const a = Math.floor(Math.random()*max)+1;
     const b = Math.floor(Math.random()*a)+1;
     const ans = a-b;
@@ -1302,13 +1385,17 @@ function makeMathQ(cat, opts={}){
     return {prompt:'כמה זה?', content:`${a} - ${b}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), ltrChoices:true};
   }
   if(cat==='mult'){
-    const t = table || (Math.floor(Math.random()*11)+2);
-    const b = Math.floor(Math.random()*12)+1;
+    const allowed = mcfg.multTables;
+    if(!allowed || !allowed.length) return makeMathQ('add', opts);
+    const t = table || pick(allowed);
+    const maxFact = mcfg.multTables.length<5 ? 5 : 12;
+    const b = Math.floor(Math.random()*maxFact)+1;
     const ans = t*b;
-    const wrongs = uniqueWrongs(ans, 144, 3);
+    const wrongs = uniqueWrongs(ans, Math.max(50, t*maxFact), 3);
     return {prompt:`לוח ${t}`, content:`${t} × ${b}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), multTable:t, multFact:b, ltrChoices:true};
   }
   if(cat==='div'){
+    if(!mcfg.allowDiv) return makeMathQ('add', opts);
     const b = Math.floor(Math.random()*9)+2;
     const ans = Math.floor(Math.random()*9)+2;
     const a = b*ans;
@@ -1316,6 +1403,7 @@ function makeMathQ(cat, opts={}){
     return {prompt:'כמה זה?', content:`${a} ÷ ${b}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), ltrChoices:true};
   }
   if(cat==='mixed'){
+    if(!mcfg.allowMixed) return makeMathQ('add', opts);
     return makeMixedChallenge();
   }
   return makeMathQ('add', {level:1});
@@ -1374,12 +1462,32 @@ function startSession(params){
     current:0,
     correct:0,
     answered:0,
-    pass: params.mode==='station' ? Math.ceil((stationData(params.station).questions)*.8) : null,
+    pass: params.mode==='station' ? Math.ceil((stationData(params.station).questions)*ageConfig().adventure.passRatio) : null,
     total: params.mode==='station' ? stationData(params.station).questions : 10,
     locked:false
   };
   buildQuestions();
   renderQuestion();
+}
+
+function dataForCategory(cat){
+  const ecfg = ageConfig().english;
+  let data = cat.data;
+  if(cat.type==='abc' && ecfg.abcMax && ecfg.abcMax < cat.data.length){
+    data = cat.data.slice(0, ecfg.abcMax);
+  }
+  if(cat.type==='numbers' && ecfg.maxNumbers && ecfg.maxNumbers < cat.data.length){
+    data = cat.data.slice(0, ecfg.maxNumbers);
+  }
+  return data;
+}
+function typesForCategory(cat){
+  const allowed = ageConfig().english.types;
+  const base = cat.type==='abc' ? ['emoji2word','letter2word']
+             : cat.type==='numbers' ? ['emoji2word','he2en']
+             : ['emoji2word','he2en','en2he','typeWord'];
+  const intersect = base.filter(t=>allowed.includes(t) || t==='letter2word');
+  return intersect.length ? intersect : ['emoji2word'];
 }
 
 function buildQuestions(){
@@ -1391,12 +1499,11 @@ function buildQuestions(){
     }
   } else if(p.mode==='english'){
     const cat = ENGLISH_CATEGORIES.find(c=>c.id===p.cat);
+    const data = dataForCategory(cat);
+    const types = typesForCategory(cat);
     for(let i=0;i<10;i++){
-      const item = pick(cat.data);
-      const types = cat.type==='abc' ? ['emoji2word','letter2word'] :
-                    cat.type==='numbers' ? ['emoji2word','he2en','word2num'] :
-                    ['emoji2word','he2en','en2he'];
-      session.questions.push({...makeEnglishQ(item, cat.data, pick(types)), domain:'english'});
+      const item = pick(data);
+      session.questions.push({...makeEnglishQ(item, data, pick(types)), domain:'english'});
     }
   } else if(p.mode==='math'){
     const cat = p.cat;
@@ -1406,7 +1513,7 @@ function buildQuestions(){
         const b = facts[i % facts.length];
         const ans = p.table*b;
         const wrongs = uniqueWrongs(ans, 144, 3);
-        session.questions.push({prompt:`לוח ${p.table}`, content:`${p.table} × ${b}`, contentClass:'q-content', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), multTable:p.table, multFact:b, domain:'math'});
+        session.questions.push({prompt:`לוח ${p.table}`, content:`${p.table} × ${b}`, contentClass:'q-content ltr', choices:shuffle([ans,...wrongs]).map(String), answer:String(ans), multTable:p.table, multFact:b, ltrChoices:true, domain:'math'});
       }
     } else {
       for(let i=0;i<10;i++){
@@ -1418,24 +1525,29 @@ function buildQuestions(){
 }
 
 function buildOneStationQuestion(stationN){
-  // Mix English and Math, difficulty scales with station number
+  const mcfg = ageConfig().math;
+  const ecfg = ageConfig().english;
   const useMath = Math.random() < .5;
   if(useMath){
-    let cat, level;
-    if(stationN<=10){ cat = pick(['add','sub']); level = 1; }
-    else if(stationN<=20){ cat = pick(['add','sub','mult']); level = 2; }
-    else { cat = pick(['add','sub','mult','div','mixed']); level = stationN<=25?2:3; }
-    return {...makeMathQ(cat,{level}), domain:'math'};
+    let pool, level;
+    if(stationN<=10){ pool = ['add','sub']; level = 1; }
+    else if(stationN<=20){ pool = ['add','sub','mult']; level = 2; }
+    else { pool = ['add','sub','mult','div','mixed']; level = stationN<=25?2:3; }
+    pool = pool.filter(c=>mcfg.cats.includes(c));
+    if(!pool.length) pool = ['add'];
+    return {...makeMathQ(pick(pool),{level}), domain:'math'};
   } else {
-    const allCats = stationN<=10 ? ENGLISH_CATEGORIES.slice(0,4)
-                  : stationN<=20 ? ENGLISH_CATEGORIES.slice(0,6)
-                  : ENGLISH_CATEGORIES;
+    let allCats = stationN<=10 ? ENGLISH_CATEGORIES.slice(0,4)
+                : stationN<=20 ? ENGLISH_CATEGORIES.slice(0,6)
+                : ENGLISH_CATEGORIES;
+    if(ecfg.cats !== 'all') allCats = allCats.filter(c=>ecfg.cats.includes(c.id));
+    if(!allCats.length) allCats = ENGLISH_CATEGORIES.filter(c=>ecfg.cats==='all' || ecfg.cats.includes(c.id));
+    if(!allCats.length) return {...makeMathQ('add',{level:1}), domain:'math'};
     const cat = pick(allCats);
-    const item = pick(cat.data);
-    const types = cat.type==='abc' ? ['emoji2word','letter2word']
-               : cat.type==='numbers' ? ['emoji2word','he2en']
-               : ['emoji2word','he2en','en2he'];
-    return {...makeEnglishQ(item, cat.data, pick(types)), domain:'english'};
+    const data = dataForCategory(cat);
+    const types = typesForCategory(cat);
+    const item = pick(data);
+    return {...makeEnglishQ(item, data, pick(types)), domain:'english'};
   }
 }
 
@@ -1591,7 +1703,7 @@ function finishSession(){
 
   if(p.mode==='station'){
     const sd = stationData(p.station);
-    const need = Math.ceil(sd.questions*.8);
+    const need = Math.ceil(sd.questions*ageConfig().adventure.passRatio);
     const passed = correct>=need;
     if(passed){
       if(!state.adventure.completed.includes(p.station)){
@@ -1730,55 +1842,103 @@ if('serviceWorker' in navigator){
 }
 
 /* ============================================================
-   WELCOME / NAME ENTRY
+   WELCOME / NAME / AGE ENTRY
    ============================================================ */
 function showWelcome(opts={}){
   const bg = document.getElementById('welcomeBg');
-  const inp = document.getElementById('welcomeName');
-  const btn = document.getElementById('welcomeBtn');
-  const hint = bg.querySelector('.welcome-hint');
-  const title = bg.querySelector('.welcome-title');
-  const sub = bg.querySelector('.welcome-sub');
-
-  if(opts.changing){
-    title.textContent = 'שינוי שם';
-    sub.textContent = `איך נקרא לך עכשיו?`;
-    hint.style.display = 'none';
-    inp.value = state.profile.name || '';
-  } else {
-    title.textContent = 'שלום!';
-    sub.textContent = 'מה השם שלך?';
-    hint.style.display = '';
-    inp.value = '';
-  }
+  const step = opts.step || (opts.changeAgeOnly ? 'age'
+              : opts.changeNameOnly ? 'name'
+              : !state.profile.name ? 'name'
+              : !state.profile.ageGroup ? 'age'
+              : 'name');
   bg.classList.add('show');
-  setTimeout(()=>inp.focus(), 120);
-
+  if(step==='name') renderWelcomeName(opts);
+  else renderWelcomeAge(opts);
+}
+function renderWelcomeName(opts){
+  const card = document.getElementById('welcomeCard');
+  const isChanging = opts.changeNameOnly;
+  card.innerHTML = `
+    <div class="welcome-emoji">👋</div>
+    <h2 class="welcome-title">${isChanging?'שינוי שם':'שלום!'}</h2>
+    <p class="welcome-sub">${isChanging?'איך נקרא לך עכשיו?':'מה השם שלך?'}</p>
+    <input type="text" id="welcomeName" class="welcome-input" placeholder="הקלד את השם שלך" maxlength="20" autocomplete="given-name" value="${(isChanging?state.profile.name:'') || ''}"/>
+    <button class="welcome-btn" id="welcomeBtn">${isChanging?'שמור 💾':'המשך ➡️'}</button>
+    ${isChanging?'':'<p class="welcome-hint">אפשר גם לדלג — נקרא לך "חבר/ה"</p>'}
+  `;
+  const inp = card.querySelector('#welcomeName');
+  const btn = card.querySelector('#welcomeBtn');
+  setTimeout(()=>inp.focus(),120);
   const submit = ()=>{
     const v = inp.value.trim();
     state.profile.name = v.slice(0,20);
     saveState();
-    bg.classList.remove('show');
     playSound('mission');
-    render();
-    if(v) showFeedback(`שלום ${v}! 👋`, 'right');
+    if(isChanging){
+      document.getElementById('welcomeBg').classList.remove('show');
+      render();
+      if(v) showFeedback(`שלום ${v}! 👋`, 'right');
+    } else {
+      // continue to age step
+      if(state.profile.ageGroup){
+        document.getElementById('welcomeBg').classList.remove('show');
+        render();
+        if(v) showFeedback(`שלום ${v}! 👋`, 'right');
+      } else {
+        renderWelcomeAge({fromName:true});
+      }
+    }
   };
   btn.onclick = submit;
-  inp.onkeydown = e => { if(e.key==='Enter') submit(); };
+  inp.onkeydown = e=>{ if(e.key==='Enter') submit(); };
 }
-function changeName(){ showWelcome({changing:true}); }
+function renderWelcomeAge(opts){
+  const card = document.getElementById('welcomeCard');
+  const isChanging = opts.changeAgeOnly;
+  const current = state.profile.ageGroup;
+  card.innerHTML = `
+    <div class="welcome-emoji">🎂</div>
+    <h2 class="welcome-title">${isChanging?'שינוי גיל':'קבוצת גיל'}</h2>
+    <p class="welcome-sub">בן/בת כמה?</p>
+    <div class="age-list">
+      ${AGE_GROUPS.map(g=>`
+        <button class="age-btn ${current===g.id?'selected':''}" data-age="${g.id}">
+          <span class="em">${g.emoji}</span>
+          <span class="text">${g.label}</span>
+        </button>
+      `).join('')}
+    </div>
+    <p class="welcome-hint">תמיד אפשר לשנות מאוחר יותר</p>
+  `;
+  card.querySelectorAll('.age-btn').forEach(b=>{
+    b.onclick = ()=>{
+      const ageId = b.dataset.age;
+      state.profile.ageGroup = ageId;
+      saveState();
+      playSound('mission');
+      card.querySelectorAll('.age-btn').forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+      // confirm + close after a beat
+      setTimeout(()=>{
+        document.getElementById('welcomeBg').classList.remove('show');
+        render();
+        const g = AGE_GROUPS.find(x=>x.id===ageId);
+        showFeedback(`${g.emoji} ${g.label}`, 'right');
+      }, 350);
+    };
+  });
+}
+function changeName(){ showWelcome({changeNameOnly:true}); }
+function changeAge(){ showWelcome({changeAgeOnly:true}); }
 
 /* ============================================================
    INIT
    ============================================================ */
 updateDailyStreak();
 generateDailyMission();
-if(!state.profile.name){
+render();
+if(!state.profile.name || !state.profile.ageGroup){
   showWelcome();
-  // still render the home behind the overlay
-  render();
-} else {
-  render();
 }
 
 </script>
